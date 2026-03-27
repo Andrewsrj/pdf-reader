@@ -12,6 +12,7 @@ O repositorio ja possui a fundacao da arquitetura em camadas:
 - `tests/` com testes unitarios iniciais, alem de uma suite de integracao orientada por amostras locais
 
 Nesta etapa, OCR, parser inicial, agregacao e exportacao para Excel ja estao ligados ao fluxo principal da UI.
+Tambem existe um bloco de versao na interface que consulta o GitHub em background para comparar a build local com releases ou tags publicadas.
 
 ## Decisoes principais
 
@@ -24,6 +25,7 @@ Motivos:
 - bom suporte a aplicacoes desktop no Windows
 - componentes nativos para selecao de pasta e salvamento de arquivo
 - sinais e slots adequados para comunicar progresso
+- verificacao de versao remota sem bloquear a UI
 - melhor caminho para empacotamento futuro com `PyInstaller`
 
 ### Pipeline de leitura
@@ -99,6 +101,7 @@ Responsavel por:
 
 - leitura e rasterizacao dos arquivos PDF
 - OCR
+- consulta opcional de versao no GitHub
 - parser de layout
 - agregacao por cidade e item
 - exportacao para Excel

@@ -13,6 +13,7 @@ Concluido nesta rodada:
 - janela principal modernizada
 - selecao de pasta com descoberta real de PDFs
 - processamento em segundo plano com progresso
+- bloco de versao da build com consulta opcional ao GitHub
 - pipeline inicial de rasterizacao, OCR e parser
 - agregacao por cidade e item integrada ao resultado do lote
 - exportacao do `.xlsx` com `Base_Itens`, `Resumo_Cidade_Item` e `Erros`

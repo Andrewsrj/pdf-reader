@@ -19,9 +19,11 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from app.version import REPOSITORY_RELEASES_URL, get_application_version
 from application.extraction_service import InvoiceBatchProcessor, discover_pdf_files
 from domain.models import BatchExtractionResult
 from infrastructure.export.excel_exporter import ExcelExporter
+from infrastructure.version.github_version_checker import GitHubVersionInfo, check_github_version
 from ui.about_dialog import AboutDialog, REPOSITORY_URL
 from ui.dialogs import choose_input_folder, choose_output_file
 from ui.view_state import (
@@ -73,8 +75,11 @@ class MainWindow(QMainWindow):
         self._pdf_files: list[Path] = []
         self._thread_pool = QThreadPool.globalInstance()
         self._active_worker: BackgroundTaskWorker | None = None
+        self._version_worker: BackgroundTaskWorker | None = None
         self._last_result: BatchExtractionResult | None = None
         self._last_output_path: Path | None = None
+        self._current_version = get_application_version()
+        self._version_info: GitHubVersionInfo | None = None
 
         self.setWindowTitle("Extrator de Notas Fiscais em PDF")
         self.resize(980, 720)
@@ -83,6 +88,7 @@ class MainWindow(QMainWindow):
         self._build_menu()
         self._build_ui()
         self._update_ui_state()
+        self._start_version_check()
 
     def _build_menu(self) -> None:
         file_menu = self.menuBar().addMenu("Arquivo")
@@ -112,8 +118,12 @@ class MainWindow(QMainWindow):
         repository_action = QAction("Abrir repositorio no GitHub", self)
         repository_action.triggered.connect(self._open_repository_url)
 
+        check_version_action = QAction("Verificar versao no GitHub", self)
+        check_version_action.triggered.connect(self._start_version_check)
+
         help_menu.addAction(about_action)
         help_menu.addAction(repository_action)
+        help_menu.addAction(check_version_action)
 
     def _build_ui(self) -> None:
         scroll_area = QScrollArea(self)
@@ -129,6 +139,7 @@ class MainWindow(QMainWindow):
         root_layout.setContentsMargins(28, 28, 28, 28)
         root_layout.setSpacing(18)
 
+        root_layout.addWidget(self._build_version_card())
         root_layout.addWidget(self._build_workspace_card())
         root_layout.addLayout(self._build_metrics_grid())
         root_layout.addWidget(self._build_progress_card())
@@ -185,6 +196,68 @@ class MainWindow(QMainWindow):
         layout.addWidget(description)
         layout.addLayout(folder_row)
         layout.addLayout(meta_row)
+
+        return card
+
+    def _build_version_card(self) -> QFrame:
+        card = QFrame(self)
+        card.setObjectName("panelCard")
+
+        layout = QVBoxLayout(card)
+        layout.setContentsMargins(24, 24, 24, 24)
+        layout.setSpacing(12)
+
+        header_row = QHBoxLayout()
+        header_row.setSpacing(12)
+
+        title = QLabel("Versao da build")
+        title.setObjectName("sectionTitle")
+
+        self.version_status_label = QLabel("Aguardando verificacao")
+        self.version_status_label.setObjectName("versionStatus")
+        self.version_status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        header_row.addWidget(title)
+        header_row.addStretch(1)
+        header_row.addWidget(self.version_status_label)
+
+        self.version_value_label = QLabel(f"v{self._current_version}")
+        self.version_value_label.setObjectName("versionValue")
+
+        current_version_title = QLabel("Build local")
+        current_version_title.setObjectName("versionTitle")
+
+        self.version_details_label = QLabel(
+            "O app pode verificar releases e tags no GitHub sem interromper o uso da interface."
+        )
+        self.version_details_label.setObjectName("versionDetails")
+        self.version_details_label.setWordWrap(True)
+
+        self.version_remote_label = QLabel("GitHub: verificacao ainda nao executada.")
+        self.version_remote_label.setObjectName("summaryLabel")
+        self.version_remote_label.setWordWrap(True)
+
+        actions_row = QHBoxLayout()
+        actions_row.setSpacing(12)
+
+        self.check_version_button = QPushButton("Verificar versao")
+        self.check_version_button.setObjectName("secondaryButton")
+        self.check_version_button.clicked.connect(self._start_version_check)
+
+        self.open_releases_button = QPushButton("Abrir releases")
+        self.open_releases_button.setObjectName("ghostButton")
+        self.open_releases_button.clicked.connect(self._open_releases_url)
+
+        actions_row.addWidget(self.check_version_button)
+        actions_row.addWidget(self.open_releases_button)
+        actions_row.addStretch(1)
+
+        layout.addLayout(header_row)
+        layout.addWidget(self.version_value_label)
+        layout.addWidget(current_version_title)
+        layout.addWidget(self.version_details_label)
+        layout.addWidget(self.version_remote_label)
+        layout.addLayout(actions_row)
 
         return card
 
@@ -342,6 +415,64 @@ class MainWindow(QMainWindow):
                 "Nao foi possivel abrir o link",
                 f"Abra manualmente o repositorio em {REPOSITORY_URL}.",
             )
+
+    def _open_releases_url(self) -> None:
+        if not QDesktopServices.openUrl(QUrl(REPOSITORY_RELEASES_URL)):
+            QMessageBox.warning(
+                self,
+                "Nao foi possivel abrir o link",
+                f"Abra manualmente a pagina em {REPOSITORY_RELEASES_URL}.",
+            )
+
+    def _start_version_check(self) -> None:
+        if self._version_worker is not None:
+            return
+
+        self.version_status_label.setText("Verificando GitHub")
+        self.version_details_label.setText("Consultando releases e tags publicadas no repositorio...")
+        self.version_remote_label.setText("GitHub: verificacao em andamento.")
+        self.check_version_button.setEnabled(False)
+
+        worker = BackgroundTaskWorker(lambda _emit_progress: check_github_version(self._current_version))
+        worker.signals.finished.connect(self._on_version_check_finished)
+        worker.signals.failed.connect(self._on_version_check_failed)
+
+        self._version_worker = worker
+        self._thread_pool.start(worker)
+
+    def _on_version_check_finished(self, result: object) -> None:
+        self._version_worker = None
+        self.check_version_button.setEnabled(True)
+
+        if not isinstance(result, GitHubVersionInfo):
+            self.version_status_label.setText("Falha na verificacao")
+            self.version_details_label.setText("GitHub: resposta inesperada ao verificar a versao.")
+            self.version_remote_label.setText("GitHub: nao foi possivel interpretar a resposta.")
+            return
+
+        self._version_info = result
+
+        status_text_by_kind = {
+            "up_to_date": "Atualizada",
+            "update_available": "Nova versao",
+            "no_remote_version": "Sem release",
+            "unreachable": "Sem conexao",
+        }
+
+        self.version_status_label.setText(status_text_by_kind.get(result.status, "Versao"))
+        self.version_details_label.setText(result.message)
+
+        if result.latest_version is not None:
+            self.version_remote_label.setText(f"GitHub: ultima versao encontrada {result.latest_version}.")
+        else:
+            self.version_remote_label.setText("GitHub: nenhuma versao remota identificada.")
+
+    def _on_version_check_failed(self, message: str) -> None:
+        self._version_worker = None
+        self.check_version_button.setEnabled(True)
+        self.version_status_label.setText("Sem conexao")
+        self.version_details_label.setText("GitHub: nao foi possivel verificar a ultima versao agora.")
+        self.version_remote_label.setText(message or "GitHub: verificacao indisponivel no momento.")
 
     def _on_extraction_started(self) -> None:
         self.status_label.setText("Renderizando paginas e preparando o OCR...")

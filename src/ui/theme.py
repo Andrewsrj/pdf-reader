@@ -234,6 +234,36 @@ def build_application_stylesheet() -> str:
         line-height: 1.45em;
     }
 
+    QLabel#versionValue {
+        background: transparent;
+        color: #153f34;
+        font-family: "Bahnschrift SemiBold", "Segoe UI Variable Display", "Segoe UI";
+        font-size: 22pt;
+        font-weight: 700;
+    }
+
+    QLabel#versionTitle {
+        background: transparent;
+        color: #20313e;
+        font-size: 10pt;
+        font-weight: 700;
+    }
+
+    QLabel#versionStatus {
+        background: #efe2cc;
+        border-radius: 12px;
+        color: #5c4a32;
+        font-size: 9pt;
+        font-weight: 700;
+        padding: 6px 10px;
+    }
+
+    QLabel#versionDetails {
+        background: transparent;
+        color: #66717c;
+        font-size: 9.5pt;
+    }
+
     QLabel#metricValue {
         background: transparent;
         font-family: "Bahnschrift SemiBold", "Segoe UI Variable Display", "Segoe UI";

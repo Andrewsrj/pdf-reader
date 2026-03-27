@@ -2,6 +2,12 @@
 
 Aplicacao desktop em Python para extrair cidade, itens, quantidades e valores totais de notas fiscais em PDF e consolidar os dados em uma planilha Excel.
 
+## Versao atual
+
+- Build local: `0.1.0`
+- Repositorio: `https://github.com/Andrewsrj/pdf-reader`
+- A interface exibe essa versao e tenta verificar em background se existe release ou tag mais recente no GitHub.
+
 ## Objetivo
 
 Entregar um software simples para o usuario final:
@@ -56,14 +62,14 @@ A fundacao inicial do projeto ja foi criada no repositorio:
 
 - estrutura em camadas dentro de `src/`
 - `pyproject.toml` com dependencias e ponto de entrada
-- janela principal inicial em `PySide6`
-- interface modernizada com hero, cards de indicadores e tema visual customizado
+- janela principal modernizada em `PySide6`
+- cards de indicadores, bloco de versao da build e tema visual customizado
 - selecao de pasta e descoberta local de arquivos `.pdf`
 - processamento em segundo plano com progresso
 - pipeline inicial de rasterizacao, OCR e extracao de itens
 - agregacao por cidade e item integrada ao resultado do lote
 - exportacao para Excel com abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
-- reexportacao do ultimo lote e dialog "Sobre o autor" com link do repositorio
+- reexportacao do ultimo lote, dialog "Sobre o autor" e verificacao opcional de versao no GitHub
 - pacote local de idiomas OCR em `resources/tessdata` com selecao automatica de `por+eng`
 - modulos separados para dominio, aplicacao, infraestrutura e UI
 - testes unitarios iniciais para descoberta de PDFs, normalizacao, parser, agregacao e exportacao

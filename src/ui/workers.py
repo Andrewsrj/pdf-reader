@@ -26,13 +26,19 @@ class BackgroundTaskWorker(QRunnable):
 
     @Slot()
     def run(self) -> None:
-        self.signals.started.emit()
+        self._emit_safely(self.signals.started.emit)
 
         try:
-            result = self._task(self.signals.progress.emit)
+            result = self._task(lambda payload: self._emit_safely(self.signals.progress.emit, payload))
         except Exception as exc:  # pragma: no cover - defensive UI path
             logging.getLogger(__name__).exception("Background task failed.")
-            self.signals.failed.emit(str(exc))
+            self._emit_safely(self.signals.failed.emit, str(exc))
             return
 
-        self.signals.finished.emit(result)
+        self._emit_safely(self.signals.finished.emit, result)
+
+    def _emit_safely(self, emitter: Callable[..., None], *args: Any) -> None:
+        try:
+            emitter(*args)
+        except RuntimeError:  # pragma: no cover - UI teardown race
+            logging.getLogger(__name__).debug("Signal emission skipped because the Qt object was already deleted.")

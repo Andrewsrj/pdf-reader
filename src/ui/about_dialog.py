@@ -12,9 +12,9 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
+from app.version import REPOSITORY_URL, get_application_version
 
 AUTHOR_NAME = "Andrews Costa"
-REPOSITORY_URL = "https://github.com/Andrewsrj/pdf-reader"
 
 
 class AboutDialog(QDialog):
@@ -47,6 +47,10 @@ class AboutDialog(QDialog):
         description.setObjectName("sectionDescription")
         description.setWordWrap(True)
 
+        version_label = QLabel(f"<b>Versao atual:</b> {get_application_version()}")
+        version_label.setObjectName("summaryLabel")
+        version_label.setTextFormat(Qt.TextFormat.RichText)
+
         author_label = QLabel(f"<b>Autor:</b> {AUTHOR_NAME}")
         author_label.setObjectName("summaryLabel")
         author_label.setTextFormat(Qt.TextFormat.RichText)
@@ -75,6 +79,7 @@ class AboutDialog(QDialog):
         card_layout.addWidget(eyebrow)
         card_layout.addWidget(title)
         card_layout.addWidget(description)
+        card_layout.addWidget(version_label)
         card_layout.addWidget(author_label)
         card_layout.addWidget(repository_label)
         card_layout.addStretch(1)

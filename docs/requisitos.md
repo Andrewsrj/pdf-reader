@@ -79,6 +79,10 @@ Ao final do processo, o sistema deve informar:
 - quantidade de falhas
 - caminho do arquivo gerado
 
+### RF-15 Exibir versao da build
+
+O sistema deve exibir na interface a versao atual da build e permitir uma verificacao opcional no GitHub para identificar se existe release ou tag mais recente.
+
 ## Status inicial de implementacao
 
 - `RF-01` ja possui implementacao inicial na janela principal.
@@ -89,6 +93,7 @@ Ao final do processo, o sistema deve informar:
 - `RF-09` ja possui implementacao inicial na camada de aplicacao.
 - `RF-10` e `RF-11` ja possuem implementacao inicial no tratamento por arquivo.
 - `RF-12`, `RF-13` e `RF-14` ja possuem implementacao inicial com dialog de salvamento, geracao do `.xlsx` e resumo final com caminho do arquivo.
+- `RF-15` ja possui implementacao inicial com bloco dedicado na interface e verificacao remota em segundo plano.
 
 Observacao de qualidade:
 

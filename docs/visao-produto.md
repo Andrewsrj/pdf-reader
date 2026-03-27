@@ -14,6 +14,7 @@ A base inicial do produto ja existe no repositorio com:
 - selecao da pasta de entrada
 - contagem de arquivos `.pdf` encontrados
 - area de status, cards de indicadores e barra de progresso conectadas ao processamento em segundo plano
+- bloco de versao da build com verificacao opcional de release/tag no GitHub
 - pipeline inicial de OCR e extracao de cidade e itens para o layout atual dos exemplos
 - pacote local de idiomas OCR com `por+eng` para melhorar leitura dos PDFs reais
 - consolidacao inicial por `cidade + item` no resultado do lote

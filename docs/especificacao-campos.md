@@ -4,6 +4,10 @@
 
 Definir os campos a extrair no MVP e o formato esperado no arquivo Excel, considerando a necessidade de um resumo por cidade e item como na imagem de referencia.
 
+Observacao:
+
+- a versao da build e o status de verificacao no GitHub sao exibidos apenas na interface do aplicativo e nao fazem parte das abas exportadas para o Excel.
+
 ## Aba detalhada sugerida
 
 Nome recomendado da aba: `Base_Itens`
