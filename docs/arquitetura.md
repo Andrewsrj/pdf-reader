@@ -74,8 +74,8 @@ Implementacao atual:
 
 - arquivo `.spec` versionado em `packaging/windows/pdf-reader.spec`
 - script de build em `scripts/build_windows.ps1`
-- inclusao de `resources/tessdata` no pacote `onedir`
-- inclusao opcional de uma distribuicao portatil do Tesseract a partir de `vendor/tesseract` ou `-TesseractDir`
+- inclusao de `resources/tessdata` no pacote `onefile`
+- inclusao opcional do subconjunto de runtime do Tesseract a partir de `vendor/tesseract` ou `-TesseractDir`
 - resolucao de caminhos em runtime preparada para modo empacotado
 - fallback de configuracao manual do `tesseract.exe` pelo usuario final
 

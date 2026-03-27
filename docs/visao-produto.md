@@ -21,7 +21,7 @@ A base inicial do produto ja existe no repositorio com:
 - consolidacao inicial por `cidade + item` no resultado do lote
 - dialog de salvamento e geracao inicial do arquivo Excel com as tres abas do MVP
 - menu de ajuda com dialog do autor e link direto para o repositorio
-- empacotamento inicial para Windows preparado com `PyInstaller`
+- empacotamento inicial para Windows preparado com `PyInstaller` em `onefile`
 - suite de integracao preparada para validar o fluxo completo com amostras locais
 
 ## Problema

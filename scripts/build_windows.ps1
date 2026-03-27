@@ -10,7 +10,8 @@ $specPath = Join-Path $projectRoot "packaging\\windows\\pdf-reader.spec"
 $distPath = Join-Path $projectRoot "dist"
 $workRoot = Join-Path $projectRoot "artifacts\\pyinstaller-work"
 $buildPath = Join-Path $workRoot (Get-Date -Format "yyyyMMddHHmmss")
-$appDistPath = Join-Path $distPath "pdf-reader"
+$appDistPath = Join-Path $distPath "pdf-reader.exe"
+$appDistFolder = Join-Path $distPath "pdf-reader"
 $defaultBundledTesseract = Join-Path $projectRoot "vendor\\tesseract"
 
 Write-Host "Projeto:" $projectRoot
@@ -30,7 +31,11 @@ try {
     New-Item -ItemType Directory -Force -Path $buildPath | Out-Null
 
     if (Test-Path $appDistPath) {
-        Remove-Item -LiteralPath $appDistPath -Recurse -Force
+        Remove-Item -LiteralPath $appDistPath -Force
+    }
+
+    if (Test-Path $appDistFolder) {
+        Remove-Item -LiteralPath $appDistFolder -Recurse -Force
     }
 
     python -m PyInstaller --noconfirm --clean --distpath $distPath --workpath $buildPath $specPath

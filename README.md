@@ -71,7 +71,7 @@ A fundacao inicial do projeto ja foi criada no repositorio:
 - exportacao para Excel com abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
 - reexportacao do ultimo lote, dialog "Sobre o autor" e verificacao opcional de versao no GitHub
 - pacote local de idiomas OCR em `resources/tessdata` com selecao automatica de `por+eng`
-- empacotamento inicial para Windows com `PyInstaller` em modo `onedir`
+- empacotamento inicial para Windows com `PyInstaller` em modo `onefile`
 - modulos separados para dominio, aplicacao, infraestrutura e UI
 - testes unitarios iniciais para descoberta de PDFs, normalizacao, parser, agregacao e exportacao
 - suite de integracao pronta para validar OCR, parser, agregacao e exportacao com amostras locais
@@ -111,14 +111,15 @@ O app detecta automaticamente o `tesseract.exe` em instalacoes comuns do Windows
 1. Instalar as dependencias de build com `pip install -e .[build]`.
 2. Se quiser distribuir o OCR junto, copie uma distribuicao portatil para `vendor/tesseract/` ou execute o build com `-TesseractDir`.
 3. Executar `powershell -ExecutionPolicy Bypass -File .\scripts\build_windows.ps1`.
-4. O build sera gerado em `dist\pdf-reader\`.
+4. O build sera gerado em `dist\pdf-reader.exe`.
 
 Observacoes:
 
-- o empacotamento atual usa `PyInstaller` em modo `onedir`
+- o empacotamento atual usa `PyInstaller` em modo `onefile`
 - `resources/tessdata` e incluido no build
-- se `vendor/tesseract` estiver presente, os binarios do OCR entram no pacote
+- se `vendor/tesseract` estiver presente, o build inclui o subconjunto de runtime do OCR (`tesseract.exe` + DLLs)
 - se o OCR nao vier embarcado, o usuario ainda pode apontar um `tesseract.exe` pela propria interface e a configuracao fica salva para os proximos usos
+- `onefile` costuma abrir um pouco mais devagar que `onedir`, porque extrai os arquivos para uma pasta temporaria antes de iniciar
 
 ## Testes de integracao
 

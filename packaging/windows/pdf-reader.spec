@@ -15,10 +15,12 @@ if resources_tessdata.exists():
     datas.append((str(resources_tessdata), "resources/tessdata"))
 
 if portable_tesseract_dir.exists():
-    for file_path in portable_tesseract_dir.rglob("*"):
-        if file_path.is_file():
-            relative_parent = Path("vendor") / "tesseract" / file_path.relative_to(portable_tesseract_dir).parent
-            datas.append((str(file_path), str(relative_parent)))
+    runtime_files = [portable_tesseract_dir / "tesseract.exe"]
+    runtime_files.extend(sorted(portable_tesseract_dir.glob("*.dll")))
+
+    for file_path in runtime_files:
+        if file_path.exists():
+            datas.append((str(file_path), "vendor/tesseract"))
 
 excludes = [
     "IPython",
@@ -57,8 +59,10 @@ pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 exe = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
     [],
-    exclude_binaries=True,
     name="pdf-reader",
     debug=False,
     bootloader_ignore_signals=False,
@@ -66,15 +70,4 @@ exe = EXE(
     upx=True,
     console=False,
     disable_windowed_traceback=False,
-)
-
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name="pdf-reader",
 )
