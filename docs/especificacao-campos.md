@@ -40,6 +40,7 @@ Implementacao atual:
 - a consolidacao ja e produzida pelo resultado do lote em memoria
 - a ordenacao atual segue `cidade` e depois `item_descricao`
 - os totais sao calculados somando os itens extraidos da base detalhada
+- a exportacao atual inclui uma linha final de `TOTAL GERAL` na aba de resumo
 
 ## Aba de erros sugerida
 
@@ -51,6 +52,11 @@ Nome recomendado da aba: `Erros`
 | tipo_erro | texto | sim | Exemplo: `ocr_falhou`, `layout_nao_suportado`, `erro_leitura` |
 | mensagem | texto | sim | Detalhe do problema |
 | etapa | texto | nao | Exemplo: `ocr`, `parser`, `exportacao` |
+
+Implementacao atual:
+
+- as tres abas ja sao gravadas no `.xlsx`
+- quando nao ha erros no lote, a aba `Erros` e criada apenas com o cabecalho
 
 ## Requisito de apresentacao do resumo
 

@@ -6,12 +6,12 @@ O repositorio ja possui a fundacao da arquitetura em camadas:
 
 - `app/` com bootstrap e ponto de entrada
 - `ui/` com janela principal, dialogs e worker em segundo plano
-- `application/` com descoberta de PDFs, orquestracao do lote e servico de agregacao
+- `application/` com descoberta de PDFs, orquestracao do lote e servicos de agregacao
 - `domain/` com modelos, validacoes e normalizadores puros
 - `infrastructure/` com modulos separados para PDF, OCR, parser, agregacao, exportacao e logging
-- `tests/` com testes unitarios iniciais para funcoes deterministicas, regras de parser e agregacao
+- `tests/` com testes unitarios iniciais para funcoes deterministicas, parser, agregacao e exportacao
 
-Nesta etapa, OCR, parser inicial e agregacao ja estao ligados ao fluxo da UI. Exportacao para Excel continua como a proxima vertical slice.
+Nesta etapa, OCR, parser inicial, agregacao e exportacao para Excel ja estao ligados ao fluxo principal da UI.
 
 ## Decisoes principais
 
@@ -54,6 +54,12 @@ Implementacao atual:
 ### Geracao do Excel
 
 Usar `pandas` com engine `openpyxl` para montar as abas e salvar em `.xlsx`.
+
+Implementacao atual:
+
+- exportacao das abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
+- formatacao minima com cabecalho em negrito, filtros, congelamento da primeira linha e larguras de coluna
+- linha final de `TOTAL GERAL` na aba de resumo
 
 ## Arquitetura em camadas
 
@@ -206,10 +212,10 @@ docs/
 
 ## Evolucao prevista da estrutura
 
-A estrutura atual ja e a base alvo do projeto. As proximas iteracoes devem aprofundar os modulos placeholders, principalmente em:
+A estrutura atual ja e a base alvo do projeto. As proximas iteracoes devem aprofundar principalmente:
 
-- `ui/workers.py` para o processamento real em segundo plano
-- `infrastructure/export/` para gerar o `.xlsx` final
+- calibracoes adicionais de OCR e parser para novos layouts
+- refinamentos de exportacao e apresentacao do workbook
 
 ## Observabilidade e erros
 

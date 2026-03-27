@@ -44,6 +44,7 @@ class InvoiceExtractionResult:
     items: list[ExtractedItem] = field(default_factory=list)
     errors: list[ExtractionError] = field(default_factory=list)
     raw_lines: list[str] = field(default_factory=list)
+    notes: list[str] = field(default_factory=list)
 
     @property
     def has_items(self) -> bool:
@@ -66,6 +67,10 @@ class BatchExtractionResult:
     @property
     def items(self) -> list[ExtractedItem]:
         return [item for result in self.results for item in result.items]
+
+    @property
+    def errors(self) -> list[ExtractionError]:
+        return [error for result in self.results for error in result.errors]
 
     @property
     def total_files(self) -> int:

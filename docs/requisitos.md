@@ -87,7 +87,8 @@ Ao final do processo, o sistema deve informar:
 - `RF-04` e `RF-05` ja possuem implementacao inicial com worker em segundo plano, barra de progresso e status textual.
 - `RF-06`, `RF-07` e `RF-08` ja possuem implementacao inicial para o layout atual dos exemplos analisados.
 - `RF-09` ja possui implementacao inicial na camada de aplicacao.
-- `RF-10` em diante continuam planejados para as proximas etapas do MVP.
+- `RF-10` e `RF-11` ja possuem implementacao inicial no tratamento por arquivo.
+- `RF-12`, `RF-13` e `RF-14` ja possuem implementacao inicial com dialog de salvamento, geracao do `.xlsx` e resumo final com caminho do arquivo.
 
 ## Requisitos nao funcionais
 

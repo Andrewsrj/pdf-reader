@@ -17,7 +17,8 @@ from PySide6.QtWidgets import (
 
 from application.extraction_service import InvoiceBatchProcessor, discover_pdf_files
 from domain.models import BatchExtractionResult
-from ui.dialogs import choose_input_folder
+from infrastructure.export.excel_exporter import ExcelExporter
+from ui.dialogs import choose_input_folder, choose_output_file
 from ui.workers import BackgroundTaskWorker
 
 
@@ -157,21 +158,43 @@ class MainWindow(QMainWindow):
 
         self._last_result = result
         self.progress_bar.setValue(100)
+        self.status_label.setText("Extracao concluida. Escolha onde salvar o Excel.")
+
+        output_file = choose_output_file(self, self._default_output_filename())
+        if not output_file:
+            self.status_label.setText("Extracao concluida. Salvamento do Excel cancelado.")
+            QMessageBox.information(
+                self,
+                "Salvamento cancelado",
+                (
+                    f"A extracao foi concluida com {result.total_items} item(ns) e "
+                    f"{result.total_summary_rows} grupo(s), mas o arquivo Excel nao foi salvo."
+                ),
+            )
+            return
+
+        try:
+            output_path = ExcelExporter().export_batch(Path(output_file), result)
+        except Exception as exc:
+            self.status_label.setText("Extracao concluida, mas a exportacao falhou.")
+            QMessageBox.critical(self, "Falha na exportacao", str(exc))
+            return
+
         self.status_label.setText(
-            f"Processamento concluido: {result.succeeded} sucesso(s), "
-            f"{result.partial} parcial(is), {result.failed} falha(s), "
-            f"{result.total_summary_rows} grupo(s)."
+            f"Excel salvo com sucesso em {output_path.name}. "
+            f"{result.total_summary_rows} grupo(s) consolidados."
         )
         QMessageBox.information(
             self,
-            "Extracao concluida",
+            "Extracao e exportacao concluidas",
             (
                 f"Arquivos processados: {result.total_files}\n"
                 f"Sucessos: {result.succeeded}\n"
                 f"Parciais: {result.partial}\n"
                 f"Falhas: {result.failed}\n"
                 f"Itens extraidos: {result.total_items}\n"
-                f"Grupos cidade/item: {result.total_summary_rows}"
+                f"Grupos cidade/item: {result.total_summary_rows}\n"
+                f"Arquivo gerado: {output_path}"
             ),
         )
 
@@ -198,3 +221,8 @@ class MainWindow(QMainWindow):
     def _set_processing_state(self, is_processing: bool) -> None:
         self.select_folder_button.setEnabled(not is_processing)
         self.extract_button.setEnabled(not is_processing and bool(self._pdf_files))
+
+    def _default_output_filename(self) -> str:
+        if self._selected_folder is not None:
+            return f"relatorio_{self._selected_folder.name}.xlsx"
+        return "relatorio_notas.xlsx"

@@ -61,8 +61,9 @@ A fundacao inicial do projeto ja foi criada no repositorio:
 - processamento em segundo plano com progresso
 - pipeline inicial de rasterizacao, OCR e extracao de itens
 - agregacao por cidade e item integrada ao resultado do lote
+- exportacao para Excel com abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
 - modulos separados para dominio, aplicacao, infraestrutura e UI
-- testes unitarios iniciais para descoberta de PDFs, normalizacao, parser e agregacao
+- testes unitarios iniciais para descoberta de PDFs, normalizacao, parser, agregacao e exportacao
 
 ## Estrutura atual
 
@@ -100,6 +101,6 @@ O app detecta automaticamente o `tesseract.exe` em instalacoes comuns do Windows
 
 ## Proximos passos sugeridos
 
-- exportador do resumo consolidado e da base detalhada
 - testes com PDFs reais anonimizados
 - melhoria de OCR com pacote de idioma `por`
+- refinamentos visuais e de usabilidade na interface

@@ -131,6 +131,7 @@ class InvoiceBatchProcessor:
             items=parsed_invoice.items,
             errors=parsed_invoice.errors,
             raw_lines=ocr_lines,
+            notes=parsed_invoice.notes,
         )
 
     def _build_failure_result(

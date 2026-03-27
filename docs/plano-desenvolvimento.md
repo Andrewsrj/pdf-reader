@@ -15,8 +15,9 @@ Concluido nesta rodada:
 - processamento em segundo plano com progresso
 - pipeline inicial de rasterizacao, OCR e parser
 - agregacao por cidade e item integrada ao resultado do lote
+- exportacao do `.xlsx` com `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
 - modulos base de dominio, aplicacao, infraestrutura e UI
-- testes unitarios iniciais para componentes deterministas, parser e agregacao
+- testes unitarios iniciais para componentes deterministas, parser, agregacao e exportacao
 
 ## Fase 0 - Fundacao do projeto
 
@@ -85,7 +86,7 @@ Resultado esperado:
 
 ## Fase 4 - Exportacao para Excel
 
-Status: pendente
+Status: concluida
 
 Entregas:
 
@@ -114,9 +115,9 @@ Resultado esperado:
 
 ## Backlog inicial sugerido
 
-1. Exportar para Excel nas abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`.
-2. Criar testes com PDFs de exemplo anonimizados.
-3. Melhorar o OCR com pacote de idioma `por` e calibracoes adicionais de preprocessamento.
+1. Criar testes com PDFs de exemplo anonimizados.
+2. Melhorar o OCR com pacote de idioma `por` e calibracoes adicionais de preprocessamento.
+3. Refinar layout, mensagens e UX da interface para o fluxo completo.
 
 ## Dependencias externas previstas
 
@@ -141,4 +142,4 @@ Resultado esperado:
 
 - reunir de 5 a 20 PDFs reais e anonimizados para orientar o parser
 - validar se todos os layouts iniciais seguem o mesmo padrao visual
-- ligar o fluxo completo `OCR -> parser -> resumo -> Excel` a partir da base ja criada
+- refinar o fluxo completo `OCR -> parser -> resumo -> Excel` a partir da base ja criada
