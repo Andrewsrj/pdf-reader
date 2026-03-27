@@ -1,14 +1,24 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import os
 from pathlib import Path
 
 
 project_root = Path.cwd()
 resources_tessdata = project_root / "resources" / "tessdata"
+portable_tesseract_dir = Path(
+    os.getenv("PDF_READER_TESSERACT_DIR", str(project_root / "vendor" / "tesseract"))
+)
 
 datas = []
 if resources_tessdata.exists():
     datas.append((str(resources_tessdata), "resources/tessdata"))
+
+if portable_tesseract_dir.exists():
+    for file_path in portable_tesseract_dir.rglob("*"):
+        if file_path.is_file():
+            relative_parent = Path("vendor") / "tesseract" / file_path.relative_to(portable_tesseract_dir).parent
+            datas.append((str(file_path), str(relative_parent)))
 
 excludes = [
     "IPython",

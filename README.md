@@ -104,19 +104,21 @@ docs/
 3. Iniciar a aplicacao com `python -m app.main`.
 
 Observacao:
-O app detecta automaticamente o `tesseract.exe` em instalacoes comuns do Windows e procura os idiomas em `resources/tessdata`, `PDF_READER_TESSDATA_DIR`, `TESSDATA_PREFIX` ou no diretorio do proprio Tesseract. Quando `por` e `eng` estao disponiveis, o OCR roda em `por+eng`.
+O app detecta automaticamente o `tesseract.exe` em instalacoes comuns do Windows, em uma copia embarcada dentro de `vendor/tesseract`, em um executavel configurado pelo proprio usuario ou via `TESSERACT_CMD`. Os idiomas continuam sendo procurados em `resources/tessdata`, `PDF_READER_TESSDATA_DIR`, `TESSDATA_PREFIX` ou no diretorio do proprio Tesseract. Quando `por` e `eng` estao disponiveis, o OCR roda em `por+eng`.
 
 ## Empacotamento Windows
 
 1. Instalar as dependencias de build com `pip install -e .[build]`.
-2. Executar `powershell -ExecutionPolicy Bypass -File .\scripts\build_windows.ps1`.
-3. O build sera gerado em `dist\pdf-reader\`.
+2. Se quiser distribuir o OCR junto, copie uma distribuicao portatil para `vendor/tesseract/` ou execute o build com `-TesseractDir`.
+3. Executar `powershell -ExecutionPolicy Bypass -File .\scripts\build_windows.ps1`.
+4. O build sera gerado em `dist\pdf-reader\`.
 
 Observacoes:
 
 - o empacotamento atual usa `PyInstaller` em modo `onedir`
 - `resources/tessdata` e incluido no build
-- o `Tesseract OCR` nao e embutido no executavel; ele continua precisando estar instalado no Windows ou configurado via `TESSERACT_CMD`
+- se `vendor/tesseract` estiver presente, os binarios do OCR entram no pacote
+- se o OCR nao vier embarcado, o usuario ainda pode apontar um `tesseract.exe` pela propria interface e a configuracao fica salva para os proximos usos
 
 ## Testes de integracao
 

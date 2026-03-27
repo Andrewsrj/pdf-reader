@@ -20,6 +20,7 @@ Concluido nesta rodada:
 - reexportacao do ultimo lote e dialog do autor com link para o GitHub
 - pacote OCR local com `por` e `eng` resolvido via `resources/tessdata`
 - empacotamento inicial para Windows com `PyInstaller` e build script dedicado
+- configuracao manual persistente do `tesseract.exe` e suporte a OCR portatil em `vendor/tesseract`
 - modulos base de dominio, aplicacao, infraestrutura e UI
 - testes unitarios iniciais para componentes deterministas, parser, agregacao e exportacao
 - suite de integracao configuravel para validar o pipeline completo com PDFs locais

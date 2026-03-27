@@ -10,6 +10,7 @@ import pytesseract
 from PIL import Image
 
 from app.runtime_paths import get_runtime_search_roots
+from app.user_settings import load_user_settings
 from domain.normalizers import normalize_whitespace
 from infrastructure.ocr.image_preprocessor import preprocess_image
 
@@ -37,6 +38,10 @@ class TesseractOcrEngine:
     def tessdata_dir(self) -> Path:
         return self._tessdata_dir
 
+    @property
+    def tesseract_cmd(self) -> str:
+        return self._tesseract_cmd
+
     def extract_lines(self, images: Sequence[Image.Image]) -> list[str]:
         lines: list[str] = []
 
@@ -56,8 +61,23 @@ class TesseractOcrEngine:
         return [line for line in lines if line]
 
     def _detect_tesseract_cmd(self) -> str:
+        configured_cmd = load_user_settings().tesseract_cmd
+        runtime_roots = get_runtime_search_roots()
+        bundled_candidates = [
+            root / "vendor" / "tesseract" / "tesseract.exe"
+            for root in runtime_roots
+        ] + [
+            root / "tesseract" / "tesseract.exe"
+            for root in runtime_roots
+        ] + [
+            root / "Tesseract-OCR" / "tesseract.exe"
+            for root in runtime_roots
+        ]
+
         candidates = [
             os.getenv("TESSERACT_CMD"),
+            configured_cmd,
+            *(str(path) for path in bundled_candidates),
             shutil.which("tesseract"),
             r"C:\Program Files\Tesseract-OCR\tesseract.exe",
             r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
@@ -69,7 +89,9 @@ class TesseractOcrEngine:
                 return str(candidate)
 
         raise RuntimeError(
-            "Nao foi possivel localizar o Tesseract OCR. Defina TESSERACT_CMD ou instale o executavel localmente."
+            "Nao foi possivel localizar o Tesseract OCR. "
+            "O app aceita uma copia embarcada em vendor/tesseract, a configuracao manual de um tesseract.exe "
+            "ou TESSERACT_CMD no ambiente."
         )
 
     def _detect_tessdata_dir(self, tessdata_dir: str | Path | None) -> Path:

@@ -87,6 +87,10 @@ O sistema deve exibir na interface a versao atual da build e permitir uma verifi
 
 O sistema deve possuir uma configuracao de empacotamento para Windows que gere uma distribuicao executavel com os recursos locais necessarios ao app.
 
+### RF-17 Configurar executavel do OCR
+
+O sistema deve permitir que o usuario final configure um `tesseract.exe` local quando o OCR nao estiver embarcado no pacote ou previamente instalado no Windows.
+
 ## Status inicial de implementacao
 
 - `RF-01` ja possui implementacao inicial na janela principal.
@@ -99,6 +103,7 @@ O sistema deve possuir uma configuracao de empacotamento para Windows que gere u
 - `RF-12`, `RF-13` e `RF-14` ja possuem implementacao inicial com dialog de salvamento, geracao do `.xlsx` e resumo final com caminho do arquivo.
 - `RF-15` ja possui implementacao inicial com bloco dedicado na interface e verificacao remota em segundo plano.
 - `RF-16` ja possui implementacao inicial com `PyInstaller`, script de build e inclusao de `resources/tessdata` no pacote.
+- `RF-17` ja possui implementacao inicial com selecao manual do executavel do OCR e persistencia da configuracao do usuario.
 
 Observacao de qualidade:
 

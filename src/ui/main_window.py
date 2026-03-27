@@ -19,13 +19,15 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from app.user_settings import UserSettings, load_user_settings, save_user_settings
 from app.version import REPOSITORY_RELEASES_URL, get_application_version
 from application.extraction_service import InvoiceBatchProcessor, discover_pdf_files
 from domain.models import BatchExtractionResult
 from infrastructure.export.excel_exporter import ExcelExporter
+from infrastructure.ocr.ocr_engine import TesseractOcrEngine
 from infrastructure.version.github_version_checker import GitHubVersionInfo, check_github_version
 from ui.about_dialog import AboutDialog, REPOSITORY_URL
-from ui.dialogs import choose_input_folder, choose_output_file
+from ui.dialogs import choose_input_folder, choose_output_file, choose_tesseract_executable
 from ui.view_state import (
     build_completion_message,
     build_dashboard_metrics,
@@ -80,6 +82,7 @@ class MainWindow(QMainWindow):
         self._last_output_path: Path | None = None
         self._current_version = get_application_version()
         self._version_info: GitHubVersionInfo | None = None
+        self._ocr_settings = load_user_settings()
 
         self.setWindowTitle("Extrator de Notas Fiscais em PDF")
         self.resize(980, 720)
@@ -101,12 +104,16 @@ class MainWindow(QMainWindow):
         self.export_again_action.setShortcut("Ctrl+S")
         self.export_again_action.triggered.connect(self._on_export_again_clicked)
 
+        self.configure_tesseract_action = QAction("Configurar Tesseract...", self)
+        self.configure_tesseract_action.triggered.connect(self._on_configure_tesseract_clicked)
+
         exit_action = QAction("Sair", self)
         exit_action.setShortcut("Ctrl+Q")
         exit_action.triggered.connect(self.close)
 
         file_menu.addAction(select_folder_action)
         file_menu.addAction(self.export_again_action)
+        file_menu.addAction(self.configure_tesseract_action)
         file_menu.addSeparator()
         file_menu.addAction(exit_action)
 
@@ -330,6 +337,10 @@ class MainWindow(QMainWindow):
         self.about_button.setObjectName("ghostButton")
         self.about_button.clicked.connect(self._show_about_dialog)
 
+        self.configure_ocr_button = QPushButton("Configurar OCR")
+        self.configure_ocr_button.setObjectName("ghostButton")
+        self.configure_ocr_button.clicked.connect(self._on_configure_tesseract_clicked)
+
         self.export_again_button = QPushButton("Exportar ultimo resultado")
         self.export_again_button.setObjectName("ghostButton")
         self.export_again_button.clicked.connect(self._on_export_again_clicked)
@@ -340,6 +351,7 @@ class MainWindow(QMainWindow):
         self.extract_button.setDefault(True)
 
         layout.addWidget(self.about_button)
+        layout.addWidget(self.configure_ocr_button)
         layout.addStretch(1)
         layout.addWidget(self.export_again_button)
         layout.addWidget(self.extract_button)
@@ -374,7 +386,10 @@ class MainWindow(QMainWindow):
             )
             return
 
-        processor = InvoiceBatchProcessor()
+        processor = self._build_ready_processor()
+        if processor is None:
+            return
+
         self._last_output_path = None
         self.progress_bar.setValue(0)
         self.status_label.setText("Iniciando o processamento em segundo plano...")
@@ -407,6 +422,19 @@ class MainWindow(QMainWindow):
     def _show_about_dialog(self) -> None:
         dialog = AboutDialog(self)
         dialog.exec()
+
+    def _on_configure_tesseract_clicked(self) -> None:
+        initial_path = self._ocr_settings.tesseract_cmd or ""
+        selected_executable = choose_tesseract_executable(self, initial_path=initial_path)
+        if not selected_executable:
+            return
+
+        if self._save_tesseract_configuration(selected_executable):
+            QMessageBox.information(
+                self,
+                "OCR configurado",
+                "O Tesseract foi validado e salvo para os proximos usos do app.",
+            )
 
     def _open_repository_url(self) -> None:
         if not QDesktopServices.openUrl(QUrl(REPOSITORY_URL)):
@@ -473,6 +501,61 @@ class MainWindow(QMainWindow):
         self.version_status_label.setText("Sem conexao")
         self.version_details_label.setText("GitHub: nao foi possivel verificar a ultima versao agora.")
         self.version_remote_label.setText(message or "GitHub: verificacao indisponivel no momento.")
+
+    def _build_ready_processor(self) -> InvoiceBatchProcessor | None:
+        try:
+            return InvoiceBatchProcessor()
+        except RuntimeError as exc:
+            if not self._prompt_to_configure_tesseract(str(exc)):
+                return None
+
+        try:
+            return InvoiceBatchProcessor()
+        except RuntimeError as exc:
+            QMessageBox.critical(self, "OCR nao configurado", str(exc))
+            return None
+
+    def _prompt_to_configure_tesseract(self, error_message: str) -> bool:
+        message_box = QMessageBox(self)
+        message_box.setIcon(QMessageBox.Icon.Warning)
+        message_box.setWindowTitle("Tesseract OCR nao encontrado")
+        message_box.setText("O OCR ainda nao esta pronto neste computador.")
+        message_box.setInformativeText(
+            f"{error_message}\n\n"
+            "Voce pode apontar agora para um tesseract.exe local ou distribuir o app com vendor/tesseract."
+        )
+        configure_button = message_box.addButton("Selecionar tesseract.exe", QMessageBox.ButtonRole.AcceptRole)
+        message_box.addButton(QMessageBox.StandardButton.Cancel)
+        message_box.exec()
+
+        if message_box.clickedButton() is not configure_button:
+            return False
+
+        selected_executable = choose_tesseract_executable(
+            self,
+            initial_path=self._ocr_settings.tesseract_cmd or "",
+        )
+        if not selected_executable:
+            return False
+
+        return self._save_tesseract_configuration(selected_executable)
+
+    def _save_tesseract_configuration(self, executable_path: str) -> bool:
+        try:
+            TesseractOcrEngine(tesseract_cmd=executable_path)
+        except Exception as exc:
+            QMessageBox.critical(
+                self,
+                "Configuracao invalida",
+                f"Nao foi possivel validar o executavel informado.\n\n{exc}",
+            )
+            return False
+
+        self._ocr_settings = UserSettings(tesseract_cmd=executable_path)
+        save_user_settings(self._ocr_settings)
+        self.status_label.setText("OCR configurado. O app esta pronto para executar a extracao.")
+        self._set_status_badge("OCR configurado", "ready")
+        return True
 
     def _on_extraction_started(self) -> None:
         self.status_label.setText("Renderizando paginas e preparando o OCR...")
@@ -602,6 +685,8 @@ class MainWindow(QMainWindow):
         self.export_again_button.setEnabled(not is_processing and self._last_result is not None)
         self.export_again_action.setEnabled(not is_processing and self._last_result is not None)
         self.about_button.setEnabled(not is_processing)
+        self.configure_ocr_button.setEnabled(not is_processing)
+        self.configure_tesseract_action.setEnabled(not is_processing)
 
     def _set_status_badge(self, text: str, kind: str) -> None:
         self.status_badge.setText(text)

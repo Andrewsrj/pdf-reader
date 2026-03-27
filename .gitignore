@@ -204,6 +204,8 @@ cython_debug/
 
 # Project artifacts
 artifacts/
+vendor/tesseract/
+!vendor/README.md
 
 # Marimo
 marimo/_static/
