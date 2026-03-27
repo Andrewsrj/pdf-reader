@@ -71,6 +71,42 @@ def test_parse_item_rows_handles_multiline_item_blocks() -> None:
     ]
 
 
+def test_parse_item_rows_recovers_totals_when_ocr_drops_decimal_separators() -> None:
+    lines = [
+        "DADOS DOS PRODUTOS / SERVICOS",
+        "MAN HW NCST MPA 2D4H FC NAC SOB *ITEM 30 codigo",
+        "NOSEMPASDAHEO. Quão 85176249 | 200 | 2,000 | 74492600 | 1489852 | 14.898,52 | 595,94 0,00 | 4,00 | 0,00",
+        "MAN MOD CONEX BRIGHT 4006 NAC SOB “ITEM 40",
+        "25483 codigo Di PE itd 4 / 85176259 | 700 | 6106 | PC | 4,000 32.336,0600 | 129.344,24 | 129.344,24 | 9.054,10 0,00 7,00 | 0,00",
+        "MAN HW MOD CONEX 1006 LR4 S NAC SOB *ITEM 50",
+        "25484 FNS29441396 / FNS294418B9 / FNS29441B2U / 85176259 | 700 | 6106 | PC | 8,000 2.350,7000 | 18.805,60 | 18.805,60 | 1.316,39 0,00 7,00 | 0,00",
+        "MAN HW MOD CONEX SFP 10G LR NAC SOB “ITEM 60",
+        "25485 FNS29441396 / FNS294418B9 / FNS29441B2U / 85176259 | 700 | 6106 | PC | 20,000 2609100 | 521820 | 521820 | 365,27 0,00 7,00 | 0,00",
+        "DADOS ADICIONAIS",
+    ]
+
+    items = parse_item_rows(lines, pdf_filename="ocr_por_tokens.pdf", city="FORTALEZA")
+
+    assert [item.item_description for item in items] == [
+        "MAN HW NCST MPA 2D4H FC NAC SOB ITEM 30",
+        "MAN MOD CONEX BRIGHT 400G NAC SOB ITEM 40",
+        "MAN HW MOD CONEX 100G LR4 S NAC SOB ITEM 50",
+        "MAN HW MOD CONEX SFP 10G LR NAC SOB ITEM 60",
+    ]
+    assert [item.item_quantity for item in items] == [
+        Decimal("2.000"),
+        Decimal("4.000"),
+        Decimal("8.000"),
+        Decimal("20.000"),
+    ]
+    assert [item.item_total_value for item in items] == [
+        Decimal("14898.52"),
+        Decimal("129344.24"),
+        Decimal("18805.60"),
+        Decimal("5218.20"),
+    ]
+
+
 def test_invoice_layout_parser_extracts_metadata_and_items() -> None:
     lines = [
         "000.006.483",

@@ -172,7 +172,7 @@ def _extract_quantity_and_total(line: str) -> tuple[Decimal | None, Decimal | No
 
     quantity = parse_brazilian_decimal(tokens[quantity_index])
     values_after_quantity = [
-        value
+        (token, value)
         for token in tokens[quantity_index + 1 :]
         if (value := parse_brazilian_decimal(token)) is not None
     ]
@@ -181,13 +181,35 @@ def _extract_quantity_and_total(line: str) -> tuple[Decimal | None, Decimal | No
         return quantity, None
 
     if len(values_after_quantity) == 1:
-        total_value = values_after_quantity[0]
-    elif values_after_quantity[0] == values_after_quantity[1]:
-        total_value = values_after_quantity[0]
+        total_token, total_value = values_after_quantity[0]
+    elif values_after_quantity[0][1] == values_after_quantity[1][1]:
+        total_token, total_value = values_after_quantity[0]
     else:
-        total_value = values_after_quantity[1]
+        selected_index = 1
+        if (
+            len(values_after_quantity) >= 3
+            and not _token_has_explicit_separator(values_after_quantity[1][0])
+            and _token_has_explicit_separator(values_after_quantity[2][0])
+        ):
+            selected_index = 2
+        total_token, total_value = values_after_quantity[selected_index]
 
-    return quantity, total_value
+    return quantity, _coerce_monetary_value(total_token, total_value)
+
+
+def _coerce_monetary_value(token: str, parsed_value: Decimal) -> Decimal:
+    if _token_has_explicit_separator(token):
+        return parsed_value
+
+    digits_only = re.sub(r"\D", "", token)
+    if len(digits_only) >= 4:
+        return Decimal(digits_only) / Decimal("100")
+
+    return parsed_value
+
+
+def _token_has_explicit_separator(token: str) -> bool:
+    return "," in token or "." in token
 
 
 def _count_numeric_values_after_quantity(line: str) -> int:
@@ -219,9 +241,12 @@ def _clean_item_description(description: str) -> str:
         .replace("'", " ")
         .replace("“", " ")
         .replace("”", " ")
+        .replace("‘", " ")
+        .replace("’", " ")
         .replace("*", " ")
     )
     cleaned = normalize_whitespace(cleaned)
+    cleaned = re.sub(r"\b(10|25|40|100|200|400)6\b", r"\1G", cleaned)
     cleaned = re.sub(r"(?i)\bcodigo\b.*$", "", cleaned)
     cleaned = re.sub(r"(?i)\bqtde\b.*$", "", cleaned)
     cleaned = re.sub(r"(?i)\bnumeros?\s+de\s+serie\b.*$", "", cleaned)

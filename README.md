@@ -62,6 +62,7 @@ A fundacao inicial do projeto ja foi criada no repositorio:
 - pipeline inicial de rasterizacao, OCR e extracao de itens
 - agregacao por cidade e item integrada ao resultado do lote
 - exportacao para Excel com abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
+- pacote local de idiomas OCR em `resources/tessdata` com selecao automatica de `por+eng`
 - modulos separados para dominio, aplicacao, infraestrutura e UI
 - testes unitarios iniciais para descoberta de PDFs, normalizacao, parser, agregacao e exportacao
 - suite de integracao pronta para validar OCR, parser, agregacao e exportacao com amostras locais
@@ -94,7 +95,7 @@ docs/
 3. Iniciar a aplicacao com `python -m app.main`.
 
 Observacao:
-O app detecta automaticamente o `tesseract.exe` em instalacoes comuns do Windows. Se o idioma `por` estiver instalado no Tesseract, ele sera priorizado; caso contrario, o pipeline usa o idioma disponivel como fallback.
+O app detecta automaticamente o `tesseract.exe` em instalacoes comuns do Windows e procura os idiomas em `resources/tessdata`, `PDF_READER_TESSDATA_DIR`, `TESSDATA_PREFIX` ou no diretorio do proprio Tesseract. Quando `por` e `eng` estao disponiveis, o OCR roda em `por+eng`.
 
 ## Testes de integracao
 
@@ -112,5 +113,4 @@ Com as amostras disponiveis, o comando esperado e `pytest tests/integration`.
 ## Proximos passos sugeridos
 
 - adicionar PDFs anonimizados em `tests/fixtures/pdfs/`
-- melhoria de OCR com pacote de idioma `por`
 - refinamentos visuais e de usabilidade na interface

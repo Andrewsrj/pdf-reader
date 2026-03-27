@@ -16,6 +16,7 @@ Concluido nesta rodada:
 - pipeline inicial de rasterizacao, OCR e parser
 - agregacao por cidade e item integrada ao resultado do lote
 - exportacao do `.xlsx` com `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
+- pacote OCR local com `por` e `eng` resolvido via `resources/tessdata`
 - modulos base de dominio, aplicacao, infraestrutura e UI
 - testes unitarios iniciais para componentes deterministas, parser, agregacao e exportacao
 - suite de integracao configuravel para validar o pipeline completo com PDFs locais
@@ -117,8 +118,8 @@ Resultado esperado:
 ## Backlog inicial sugerido
 
 1. Adicionar PDFs anonimizados em `tests/fixtures/pdfs/`.
-2. Melhorar o OCR com pacote de idioma `por` e calibracoes adicionais de preprocessamento.
-3. Refinar layout, mensagens e UX da interface para o fluxo completo.
+2. Refinar layout, mensagens e UX da interface para o fluxo completo.
+3. Calibrar OCR e parser para novos layouts e variacoes de ruido.
 
 ## Dependencias externas previstas
 

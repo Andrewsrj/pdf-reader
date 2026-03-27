@@ -10,7 +10,7 @@ EXPECTED_SAMPLE_RESULTS = {
         "document_number": "000.011.964",
         "issue_date": date(2026, 2, 27),
         "items": [
-            ("WAN INSTALLATION KIT TYPE AGGREGATION ITEM", Decimal("1.000"), Decimal("36339.6500")),
+            ("MAN INSTALLATION KIT TYPE AGGREGATION ITEM", Decimal("1.000"), Decimal("36339.6500")),
         ],
     },
     "PR_6478_HW_TIM.pdf": {
@@ -59,9 +59,9 @@ EXPECTED_SUMMARY_ROWS = [
     ("FORTALEZA", "MAN HW MOD CONEX SFP 10G LR NAC SOB ITEM 60", Decimal("20.000"), Decimal("5218.20")),
     ("FORTALEZA", "MAN HW NCS7 MOD RP2 E NAC SOB ITEM 20", Decimal("2.000"), Decimal("10641.80")),
     ("FORTALEZA", "MAN HW NCST MPA 2D4H FC NAC SOB ITEM 30", Decimal("2.000"), Decimal("14898.52")),
+    ("FORTALEZA", "MAN INSTALLATION KIT TYPE AGGREGATION ITEM", Decimal("1.000"), Decimal("36339.6500")),
     ("FORTALEZA", "MAN MOD CONEX BRIGHT 400G NAC SOB ITEM 40", Decimal("4.000"), Decimal("129344.24")),
     ("FORTALEZA", "MAN NCS 57C3 MOD SYS NAC SOB ITEM 10", Decimal("1.000"), Decimal("56825.5000")),
-    ("FORTALEZA", "WAN INSTALLATION KIT TYPE AGGREGATION ITEM", Decimal("1.000"), Decimal("36339.6500")),
 ]
 
 

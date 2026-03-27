@@ -93,6 +93,7 @@ Ao final do processo, o sistema deve informar:
 Observacao de qualidade:
 
 - o repositorio ja possui uma suite de integracao preparada para validar o lote completo com um diretorio configuravel de PDFs de exemplo.
+- o OCR local ja considera `por+eng` quando os arquivos `.traineddata` estao disponiveis em `resources/tessdata` ou em um diretorio configurado.
 
 ## Requisitos nao funcionais
 

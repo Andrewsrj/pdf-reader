@@ -48,8 +48,10 @@ Implementacao atual:
 
 - renderizacao em 250 DPI para melhorar a leitura das linhas de item
 - autodeteccao do `tesseract.exe` em caminhos comuns do Windows
-- preferencia pelo idioma `por` quando instalado, com fallback para o idioma disponivel
+- resolucao automatica do `tessdata` em `resources/tessdata`, variaveis de ambiente ou instalacao local do Tesseract
+- OCR padrao em `por+eng` quando ambos os idiomas estao disponiveis
 - OCR orientado a linhas com `image_to_string`, que preservou melhor o layout dos exemplos atuais
+- heuristicas de parser para recuperar valores monetarios quando o OCR omite separadores decimais
 
 ### Geracao do Excel
 
@@ -235,7 +237,7 @@ A estrutura atual ja e a base alvo do projeto. As proximas iteracoes devem aprof
 Implementacao atual:
 
 - a suite de integracao aceita `tests/fixtures/pdfs/` ou `PDF_READER_SAMPLE_DIR`
-- as expectativas atuais cobrem extração, resumo agregado e estrutura do workbook exportado
+- as expectativas atuais cobrem extracao, resumo agregado e estrutura do workbook exportado
 
 ## Riscos tecnicos
 
