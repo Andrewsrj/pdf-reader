@@ -83,6 +83,10 @@ Ao final do processo, o sistema deve informar:
 
 O sistema deve exibir na interface a versao atual da build e permitir uma verificacao opcional no GitHub para identificar se existe release ou tag mais recente.
 
+### RF-16 Preparar distribuicao Windows
+
+O sistema deve possuir uma configuracao de empacotamento para Windows que gere uma distribuicao executavel com os recursos locais necessarios ao app.
+
 ## Status inicial de implementacao
 
 - `RF-01` ja possui implementacao inicial na janela principal.
@@ -94,6 +98,7 @@ O sistema deve exibir na interface a versao atual da build e permitir uma verifi
 - `RF-10` e `RF-11` ja possuem implementacao inicial no tratamento por arquivo.
 - `RF-12`, `RF-13` e `RF-14` ja possuem implementacao inicial com dialog de salvamento, geracao do `.xlsx` e resumo final com caminho do arquivo.
 - `RF-15` ja possui implementacao inicial com bloco dedicado na interface e verificacao remota em segundo plano.
+- `RF-16` ja possui implementacao inicial com `PyInstaller`, script de build e inclusao de `resources/tessdata` no pacote.
 
 Observacao de qualidade:
 

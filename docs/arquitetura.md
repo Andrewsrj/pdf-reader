@@ -13,6 +13,7 @@ O repositorio ja possui a fundacao da arquitetura em camadas:
 
 Nesta etapa, OCR, parser inicial, agregacao e exportacao para Excel ja estao ligados ao fluxo principal da UI.
 Tambem existe um bloco de versao na interface que consulta o GitHub em background para comparar a build local com releases ou tags publicadas.
+O projeto tambem possui configuracao inicial de empacotamento Windows com `PyInstaller`.
 
 ## Decisoes principais
 
@@ -64,6 +65,16 @@ Implementacao atual:
 - exportacao das abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
 - formatacao minima com cabecalho em negrito, filtros, congelamento da primeira linha e larguras de coluna
 - linha final de `TOTAL GERAL` na aba de resumo
+
+### Empacotamento Windows
+
+Implementacao atual:
+
+- arquivo `.spec` versionado em `packaging/windows/pdf-reader.spec`
+- script de build em `scripts/build_windows.ps1`
+- inclusao de `resources/tessdata` no pacote `onedir`
+- resolucao de caminhos em runtime preparada para modo empacotado
+- `Tesseract OCR` mantido como dependencia externa do Windows
 
 ## Arquitetura em camadas
 

@@ -71,6 +71,7 @@ A fundacao inicial do projeto ja foi criada no repositorio:
 - exportacao para Excel com abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
 - reexportacao do ultimo lote, dialog "Sobre o autor" e verificacao opcional de versao no GitHub
 - pacote local de idiomas OCR em `resources/tessdata` com selecao automatica de `por+eng`
+- empacotamento inicial para Windows com `PyInstaller` em modo `onedir`
 - modulos separados para dominio, aplicacao, infraestrutura e UI
 - testes unitarios iniciais para descoberta de PDFs, normalizacao, parser, agregacao e exportacao
 - suite de integracao pronta para validar OCR, parser, agregacao e exportacao com amostras locais
@@ -105,6 +106,18 @@ docs/
 Observacao:
 O app detecta automaticamente o `tesseract.exe` em instalacoes comuns do Windows e procura os idiomas em `resources/tessdata`, `PDF_READER_TESSDATA_DIR`, `TESSDATA_PREFIX` ou no diretorio do proprio Tesseract. Quando `por` e `eng` estao disponiveis, o OCR roda em `por+eng`.
 
+## Empacotamento Windows
+
+1. Instalar as dependencias de build com `pip install -e .[build]`.
+2. Executar `powershell -ExecutionPolicy Bypass -File .\scripts\build_windows.ps1`.
+3. O build sera gerado em `dist\pdf-reader\`.
+
+Observacoes:
+
+- o empacotamento atual usa `PyInstaller` em modo `onedir`
+- `resources/tessdata` e incluido no build
+- o `Tesseract OCR` nao e embutido no executavel; ele continua precisando estar instalado no Windows ou configurado via `TESSERACT_CMD`
+
 ## Testes de integracao
 
 Os testes de integracao do pipeline completo podem usar:
@@ -122,4 +135,4 @@ Com as amostras disponiveis, o comando esperado e `pytest tests/integration`.
 
 - adicionar PDFs anonimizados em `tests/fixtures/pdfs/`
 - calibrar OCR e parser para novos layouts de nota
-- preparar empacotamento para Windows com `PyInstaller`
+- polir distribuicao Windows com icone, assinatura e instalador

@@ -9,6 +9,7 @@ from pathlib import Path
 import pytesseract
 from PIL import Image
 
+from app.runtime_paths import get_runtime_search_roots
 from domain.normalizers import normalize_whitespace
 from infrastructure.ocr.image_preprocessor import preprocess_image
 
@@ -72,13 +73,20 @@ class TesseractOcrEngine:
         )
 
     def _detect_tessdata_dir(self, tessdata_dir: str | Path | None) -> Path:
-        repo_root = Path(__file__).resolve().parents[3]
+        runtime_roots = get_runtime_search_roots()
+        bundled_candidates = [
+            root / "resources" / "tessdata"
+            for root in runtime_roots
+        ] + [
+            root / "tessdata"
+            for root in runtime_roots
+        ]
         explicit_candidates = [
             Path(tessdata_dir) if tessdata_dir is not None else None,
             Path(os.environ["PDF_READER_TESSDATA_DIR"]) if os.getenv("PDF_READER_TESSDATA_DIR") else None,
             Path(os.environ["TESSDATA_PREFIX"]) if os.getenv("TESSDATA_PREFIX") else None,
-            repo_root / "resources" / "tessdata",
-            repo_root / "artifacts" / "tessdata",
+            *bundled_candidates,
+            runtime_roots[0] / "artifacts" / "tessdata",
             Path(self._tesseract_cmd).resolve().parent / "tessdata",
         ]
 

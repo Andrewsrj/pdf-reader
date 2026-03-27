@@ -19,6 +19,7 @@ Concluido nesta rodada:
 - exportacao do `.xlsx` com `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
 - reexportacao do ultimo lote e dialog do autor com link para o GitHub
 - pacote OCR local com `por` e `eng` resolvido via `resources/tessdata`
+- empacotamento inicial para Windows com `PyInstaller` e build script dedicado
 - modulos base de dominio, aplicacao, infraestrutura e UI
 - testes unitarios iniciais para componentes deterministas, parser, agregacao e exportacao
 - suite de integracao configuravel para validar o pipeline completo com PDFs locais
@@ -104,7 +105,7 @@ Resultado esperado:
 
 ## Fase 5 - Qualidade e distribuicao
 
-Status: pendente
+Status: em andamento
 
 Entregas:
 
@@ -121,7 +122,7 @@ Resultado esperado:
 
 1. Adicionar PDFs anonimizados em `tests/fixtures/pdfs/`.
 2. Calibrar OCR e parser para novos layouts e variacoes de ruido.
-3. Preparar empacotamento inicial com `PyInstaller`.
+3. Polir a distribuicao Windows com icone, assinatura e instalador.
 
 ## Dependencias externas previstas
 
