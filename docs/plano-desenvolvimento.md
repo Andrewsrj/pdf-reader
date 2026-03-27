@@ -14,8 +14,9 @@ Concluido nesta rodada:
 - selecao de pasta com descoberta real de PDFs
 - processamento em segundo plano com progresso
 - pipeline inicial de rasterizacao, OCR e parser
+- agregacao por cidade e item integrada ao resultado do lote
 - modulos base de dominio, aplicacao, infraestrutura e UI
-- testes unitarios iniciais para componentes deterministas e parser
+- testes unitarios iniciais para componentes deterministas, parser e agregacao
 
 ## Fase 0 - Fundacao do projeto
 
@@ -68,7 +69,7 @@ Resultado esperado:
 
 ## Fase 3 - Parser itemizado do MVP
 
-Status: em andamento
+Status: concluida
 
 Entregas:
 
@@ -113,10 +114,9 @@ Resultado esperado:
 
 ## Backlog inicial sugerido
 
-1. Integrar agregacao por cidade e item ao resultado do lote.
-2. Exportar para Excel nas abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`.
-3. Criar testes com PDFs de exemplo anonimizados.
-4. Melhorar o OCR com pacote de idioma `por` e calibracoes adicionais de preprocessamento.
+1. Exportar para Excel nas abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`.
+2. Criar testes com PDFs de exemplo anonimizados.
+3. Melhorar o OCR com pacote de idioma `por` e calibracoes adicionais de preprocessamento.
 
 ## Dependencias externas previstas
 

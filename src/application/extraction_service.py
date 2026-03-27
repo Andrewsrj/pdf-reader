@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 from pathlib import Path
 
+from application.aggregation_service import CityItemAggregationService
 from application.progress import ProgressUpdate
 from domain.models import BatchExtractionResult, ExtractionError, InvoiceExtractionResult
 from infrastructure.ocr.ocr_engine import TesseractOcrEngine
@@ -28,16 +29,19 @@ class InvoiceBatchProcessor:
     """Orchestrate PDF rendering, OCR and invoice parsing for a batch."""
 
     _STEPS_PER_FILE = 4
+    _FINALIZATION_STEPS = 1
 
     def __init__(
         self,
         renderer: PdfRenderer | None = None,
         ocr_engine: TesseractOcrEngine | None = None,
         parser: InvoiceLayoutParser | None = None,
+        aggregation_service: CityItemAggregationService | None = None,
     ) -> None:
         self._renderer = renderer or PdfRenderer()
         self._ocr_engine = ocr_engine or TesseractOcrEngine()
         self._parser = parser or InvoiceLayoutParser()
+        self._aggregation_service = aggregation_service or CityItemAggregationService()
 
     def extract_batch(
         self,
@@ -45,7 +49,7 @@ class InvoiceBatchProcessor:
         progress_callback: Callable[[ProgressUpdate], None] | None = None,
     ) -> BatchExtractionResult:
         results: list[InvoiceExtractionResult] = []
-        total_steps = max(len(pdf_paths) * self._STEPS_PER_FILE, 1)
+        total_steps = max((len(pdf_paths) * self._STEPS_PER_FILE) + self._FINALIZATION_STEPS, 1)
 
         for index, pdf_path in enumerate(pdf_paths):
             base_step = index * self._STEPS_PER_FILE
@@ -67,7 +71,16 @@ class InvoiceBatchProcessor:
                 message=self._build_completion_message(result),
             )
 
-        return BatchExtractionResult(results=results)
+        self._emit_progress(
+            progress_callback,
+            current=total_steps,
+            total=total_steps,
+            message="Consolidando resumo por cidade e item...",
+        )
+
+        batch_result = BatchExtractionResult(results=results)
+        summary_rows = self._aggregation_service.aggregate_batch(batch_result)
+        return BatchExtractionResult(results=results, summary_rows=summary_rows)
 
     def _extract_single_pdf(
         self,

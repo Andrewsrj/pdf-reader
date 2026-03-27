@@ -6,12 +6,12 @@ O repositorio ja possui a fundacao da arquitetura em camadas:
 
 - `app/` com bootstrap e ponto de entrada
 - `ui/` com janela principal, dialogs e worker em segundo plano
-- `application/` com descoberta de PDFs e orquestracao do lote
+- `application/` com descoberta de PDFs, orquestracao do lote e servico de agregacao
 - `domain/` com modelos, validacoes e normalizadores puros
 - `infrastructure/` com modulos separados para PDF, OCR, parser, agregacao, exportacao e logging
-- `tests/` com testes unitarios iniciais para funcoes deterministicas e regras de parser
+- `tests/` com testes unitarios iniciais para funcoes deterministicas, regras de parser e agregacao
 
-Nesta etapa, OCR e parser inicial ja estao ligados ao fluxo da UI. Agregacao final e exportacao para Excel continuam como as proximas vertical slices.
+Nesta etapa, OCR, parser inicial e agregacao ja estao ligados ao fluxo da UI. Exportacao para Excel continua como a proxima vertical slice.
 
 ## Decisoes principais
 
@@ -160,6 +160,7 @@ src/
     main.py
   application/
     __init__.py
+    aggregation_service.py
     extraction_service.py
     progress.py
   domain/
@@ -208,7 +209,6 @@ docs/
 A estrutura atual ja e a base alvo do projeto. As proximas iteracoes devem aprofundar os modulos placeholders, principalmente em:
 
 - `ui/workers.py` para o processamento real em segundo plano
-- `infrastructure/aggregation/` para consolidacao por cidade e item
 - `infrastructure/export/` para gerar o `.xlsx` final
 
 ## Observabilidade e erros

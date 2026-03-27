@@ -35,6 +35,12 @@ Cada linha representa a consolidacao de uma combinacao `cidade + item_descricao`
 | soma_item_qtd | decimal | sim | Soma das quantidades por cidade e item |
 | soma_item_valor_total | decimal | sim | Soma dos valores totais por cidade e item |
 
+Implementacao atual:
+
+- a consolidacao ja e produzida pelo resultado do lote em memoria
+- a ordenacao atual segue `cidade` e depois `item_descricao`
+- os totais sao calculados somando os itens extraidos da base detalhada
+
 ## Aba de erros sugerida
 
 Nome recomendado da aba: `Erros`

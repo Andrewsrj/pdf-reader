@@ -28,6 +28,14 @@ class ExtractionError:
 
 
 @dataclass(slots=True)
+class CityItemSummaryRow:
+    city: str
+    item_description: str
+    total_item_quantity: Decimal
+    total_item_value: Decimal
+
+
+@dataclass(slots=True)
 class InvoiceExtractionResult:
     pdf_path: Path
     city: str | None = None
@@ -53,6 +61,11 @@ class InvoiceExtractionResult:
 @dataclass(slots=True)
 class BatchExtractionResult:
     results: list[InvoiceExtractionResult] = field(default_factory=list)
+    summary_rows: list[CityItemSummaryRow] = field(default_factory=list)
+
+    @property
+    def items(self) -> list[ExtractedItem]:
+        return [item for result in self.results for item in result.items]
 
     @property
     def total_files(self) -> int:
@@ -72,4 +85,16 @@ class BatchExtractionResult:
 
     @property
     def total_items(self) -> int:
-        return sum(len(result.items) for result in self.results)
+        return len(self.items)
+
+    @property
+    def total_summary_rows(self) -> int:
+        return len(self.summary_rows)
+
+    @property
+    def summary_total_quantity(self) -> Decimal:
+        return sum((row.total_item_quantity for row in self.summary_rows), start=Decimal("0"))
+
+    @property
+    def summary_total_value(self) -> Decimal:
+        return sum((row.total_item_value for row in self.summary_rows), start=Decimal("0"))

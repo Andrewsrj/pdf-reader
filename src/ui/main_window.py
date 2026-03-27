@@ -159,7 +159,8 @@ class MainWindow(QMainWindow):
         self.progress_bar.setValue(100)
         self.status_label.setText(
             f"Processamento concluido: {result.succeeded} sucesso(s), "
-            f"{result.partial} parcial(is), {result.failed} falha(s)."
+            f"{result.partial} parcial(is), {result.failed} falha(s), "
+            f"{result.total_summary_rows} grupo(s)."
         )
         QMessageBox.information(
             self,
@@ -169,7 +170,8 @@ class MainWindow(QMainWindow):
                 f"Sucessos: {result.succeeded}\n"
                 f"Parciais: {result.partial}\n"
                 f"Falhas: {result.failed}\n"
-                f"Itens extraidos: {result.total_items}"
+                f"Itens extraidos: {result.total_items}\n"
+                f"Grupos cidade/item: {result.total_summary_rows}"
             ),
         )
 

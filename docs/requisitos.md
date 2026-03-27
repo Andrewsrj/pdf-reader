@@ -86,7 +86,8 @@ Ao final do processo, o sistema deve informar:
 - `RF-03` ja dispara o processamento em lote.
 - `RF-04` e `RF-05` ja possuem implementacao inicial com worker em segundo plano, barra de progresso e status textual.
 - `RF-06`, `RF-07` e `RF-08` ja possuem implementacao inicial para o layout atual dos exemplos analisados.
-- `RF-09` em diante continuam planejados para as proximas etapas do MVP.
+- `RF-09` ja possui implementacao inicial na camada de aplicacao.
+- `RF-10` em diante continuam planejados para as proximas etapas do MVP.
 
 ## Requisitos nao funcionais
 

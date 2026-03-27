@@ -15,6 +15,7 @@ A base inicial do produto ja existe no repositorio com:
 - contagem de arquivos `.pdf` encontrados
 - area de status e barra de progresso conectadas ao processamento em segundo plano
 - pipeline inicial de OCR e extracao de cidade e itens para o layout atual dos exemplos
+- consolidacao inicial por `cidade + item` no resultado do lote
 
 ## Problema
 
