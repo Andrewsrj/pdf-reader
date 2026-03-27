@@ -34,3 +34,6 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "integration: tests that exercise the full OCR, parsing, aggregation and export pipeline",
+]

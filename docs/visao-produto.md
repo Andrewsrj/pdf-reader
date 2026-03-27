@@ -17,6 +17,7 @@ A base inicial do produto ja existe no repositorio com:
 - pipeline inicial de OCR e extracao de cidade e itens para o layout atual dos exemplos
 - consolidacao inicial por `cidade + item` no resultado do lote
 - dialog de salvamento e geracao inicial do arquivo Excel com as tres abas do MVP
+- suite de integracao preparada para validar o fluxo completo com amostras locais
 
 ## Problema
 

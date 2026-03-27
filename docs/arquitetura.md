@@ -9,7 +9,7 @@ O repositorio ja possui a fundacao da arquitetura em camadas:
 - `application/` com descoberta de PDFs, orquestracao do lote e servicos de agregacao
 - `domain/` com modelos, validacoes e normalizadores puros
 - `infrastructure/` com modulos separados para PDF, OCR, parser, agregacao, exportacao e logging
-- `tests/` com testes unitarios iniciais para funcoes deterministicas, parser, agregacao e exportacao
+- `tests/` com testes unitarios iniciais, alem de uma suite de integracao orientada por amostras locais
 
 Nesta etapa, OCR, parser inicial, agregacao e exportacao para Excel ja estao ligados ao fluxo principal da UI.
 
@@ -231,6 +231,11 @@ A estrutura atual ja e a base alvo do projeto. As proximas iteracoes devem aprof
 - testes de integracao do fluxo OCR -> parser -> agregacao
 - testes de exportacao do Excel
 - testes de UI em pontos criticos com `pytest-qt`, se adotado
+
+Implementacao atual:
+
+- a suite de integracao aceita `tests/fixtures/pdfs/` ou `PDF_READER_SAMPLE_DIR`
+- as expectativas atuais cobrem extração, resumo agregado e estrutura do workbook exportado
 
 ## Riscos tecnicos
 

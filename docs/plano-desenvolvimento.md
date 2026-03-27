@@ -18,6 +18,7 @@ Concluido nesta rodada:
 - exportacao do `.xlsx` com `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
 - modulos base de dominio, aplicacao, infraestrutura e UI
 - testes unitarios iniciais para componentes deterministas, parser, agregacao e exportacao
+- suite de integracao configuravel para validar o pipeline completo com PDFs locais
 
 ## Fase 0 - Fundacao do projeto
 
@@ -115,7 +116,7 @@ Resultado esperado:
 
 ## Backlog inicial sugerido
 
-1. Criar testes com PDFs de exemplo anonimizados.
+1. Adicionar PDFs anonimizados em `tests/fixtures/pdfs/`.
 2. Melhorar o OCR com pacote de idioma `por` e calibracoes adicionais de preprocessamento.
 3. Refinar layout, mensagens e UX da interface para o fluxo completo.
 

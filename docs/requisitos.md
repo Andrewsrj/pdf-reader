@@ -90,6 +90,10 @@ Ao final do processo, o sistema deve informar:
 - `RF-10` e `RF-11` ja possuem implementacao inicial no tratamento por arquivo.
 - `RF-12`, `RF-13` e `RF-14` ja possuem implementacao inicial com dialog de salvamento, geracao do `.xlsx` e resumo final com caminho do arquivo.
 
+Observacao de qualidade:
+
+- o repositorio ja possui uma suite de integracao preparada para validar o lote completo com um diretorio configuravel de PDFs de exemplo.
+
 ## Requisitos nao funcionais
 
 ### RNF-01 Plataforma alvo
