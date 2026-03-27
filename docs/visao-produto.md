@@ -4,6 +4,17 @@
 
 O projeto tem como objetivo transformar um conjunto de notas fiscais em PDF em uma planilha Excel consolidada por cidade e item, por meio de uma aplicacao desktop simples de operar.
 
+## Status atual da implementacao
+
+A base inicial do produto ja existe no repositorio com:
+
+- estrutura modular em `src/`
+- ponto de entrada do aplicativo
+- janela principal inicial em `PySide6`
+- selecao da pasta de entrada
+- contagem de arquivos `.pdf` encontrados
+- area de status e barra de progresso preparadas para o fluxo em segundo plano
+
 ## Problema
 
 Hoje a extracao manual de dados fiscais de PDFs consome tempo, aumenta a chance de erro e dificulta a consolidacao rapida de informacoes para controles administrativos, financeiros e contabeis.

@@ -50,17 +50,51 @@ Fica planejado para evolucao posterior:
 - [Arquitetura](docs/arquitetura.md)
 - [Plano de desenvolvimento](docs/plano-desenvolvimento.md)
 
+## Status atual
+
+A fundacao inicial do projeto ja foi criada no repositorio:
+
+- estrutura em camadas dentro de `src/`
+- `pyproject.toml` com dependencias e ponto de entrada
+- janela principal inicial em `PySide6`
+- selecao de pasta e descoberta local de arquivos `.pdf`
+- modulos separados para dominio, aplicacao, infraestrutura e UI
+- testes unitarios iniciais para descoberta de PDFs e normalizacao
+
+## Estrutura atual
+
+```text
+src/
+  app/
+  application/
+  domain/
+  infrastructure/
+    aggregation/
+    export/
+    logging/
+    ocr/
+    parser/
+    pdf/
+  ui/
+tests/
+  integration/
+  unit/
+docs/
+```
+
+## Como executar
+
+1. Criar e ativar um ambiente virtual Python 3.11+.
+2. Instalar as dependencias com `pip install -e .[dev]`.
+3. Iniciar a aplicacao com `python -m app.main`.
+
 ## Direcao tecnica recomendada
 
 `PySide6` continua sendo a melhor escolha para a interface. Como os PDFs de exemplo nao expuseram texto por leitura simples, o MVP passa a considerar OCR como parte do fluxo principal de extracao.
 
-## Proximo passo sugerido
+## Proximos passos sugeridos
 
-Com esta base documental pronta, o proximo passo e criar o esqueleto do projeto em Python com:
-
-- estrutura de pastas
-- janela principal
-- servico de varredura da pasta
 - pipeline de OCR e extracao com progresso
 - parser de cidade e itens
 - exportador do resumo consolidado e da base detalhada
+- testes com PDFs reais anonimizados

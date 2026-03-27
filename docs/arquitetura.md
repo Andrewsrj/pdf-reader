@@ -1,4 +1,17 @@
-# Arquitetura Proposta
+# Arquitetura Atual e Planejada
+
+## Estado atual do codigo
+
+O repositorio ja possui a fundacao da arquitetura em camadas:
+
+- `app/` com bootstrap e ponto de entrada
+- `ui/` com janela principal, dialogs e worker generico
+- `application/` com descoberta inicial de PDFs e modelos de progresso
+- `domain/` com modelos, validacoes e normalizadores puros
+- `infrastructure/` com modulos separados para PDF, OCR, parser, agregacao, exportacao e logging
+- `tests/` com testes unitarios iniciais para funcoes deterministicas
+
+Nesta etapa, OCR, parser detalhado e exportacao ainda estao como interfaces ou placeholders para a proxima vertical slice.
 
 ## Decisoes principais
 
@@ -130,45 +143,67 @@ Motivo: simplicidade e boa integracao com o loop da interface.
 - consolidar registros por `cidade + item_descricao`
 - calcular somas para a aba de resumo
 
-## Estrutura de pastas recomendada
+## Estrutura de pastas atual
 
 ```text
 src/
   app/
-    main.py
+    __init__.py
     bootstrap.py
-  ui/
-    main_window.py
-    dialogs.py
-    workers.py
+    main.py
   application/
+    __init__.py
     extraction_service.py
     progress.py
-    aggregation_service.py
   domain/
+    __init__.py
     models.py
+    normalizers.py
     validators.py
   infrastructure/
-    pdf/
-      renderer.py
-      metadata_reader.py
+    __init__.py
+    aggregation/
+      __init__.py
+      city_item_aggregator.py
+    export/
+      __init__.py
+      excel_exporter.py
+    logging/
+      __init__.py
+      logger.py
     ocr/
+      __init__.py
       image_preprocessor.py
       ocr_engine.py
     parser/
+      __init__.py
+      city_parser.py
       invoice_layout_parser.py
       item_line_parser.py
-    aggregation/
-      city_item_aggregator.py
-    export/
-      excel_exporter.py
-    logging/
-      logger.py
+    pdf/
+      __init__.py
+      metadata_reader.py
+      renderer.py
+  ui/
+    __init__.py
+    dialogs.py
+    main_window.py
+    workers.py
 tests/
-  unit/
+  conftest.py
   integration/
+  unit/
 docs/
 ```
+
+## Evolucao prevista da estrutura
+
+A estrutura atual ja e a base alvo do projeto. As proximas iteracoes devem aprofundar os modulos placeholders, principalmente em:
+
+- `ui/workers.py` para o processamento real em segundo plano
+- `infrastructure/pdf/` e `infrastructure/ocr/` para rasterizacao e OCR
+- `infrastructure/parser/` para extracao de cidade e itens
+- `infrastructure/export/` para gerar o `.xlsx` final
 
 ## Observabilidade e erros
 

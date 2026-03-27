@@ -4,7 +4,20 @@
 
 Entregar um MVP funcional do extrator de notas fiscais em PDF para Excel com interface desktop.
 
+## Status atual
+
+Concluido nesta rodada:
+
+- estrutura inicial de pastas em `src/`
+- `pyproject.toml` com dependencias e entry point
+- janela principal inicial
+- selecao de pasta com descoberta real de PDFs
+- modulos base de dominio, aplicacao, infraestrutura e UI
+- testes unitarios iniciais para componentes deterministas
+
 ## Fase 0 - Fundacao do projeto
+
+Status: concluida
 
 Entregas:
 
@@ -16,9 +29,11 @@ Entregas:
 
 Resultado esperado:
 
-- projeto executa uma janela inicial vazia com a stack escolhida
+- projeto executa uma janela inicial funcional com a stack escolhida
 
 ## Fase 1 - Interface base
+
+Status: em andamento
 
 Entregas:
 
@@ -31,9 +46,11 @@ Entregas:
 
 Resultado esperado:
 
-- usuario consegue selecionar uma pasta e iniciar uma acao simulada com progresso
+- usuario consegue selecionar uma pasta, validar os PDFs encontrados e seguir para o processamento em segundo plano
 
 ## Fase 2 - Pipeline de leitura e OCR
+
+Status: pendente
 
 Entregas:
 
@@ -49,6 +66,8 @@ Resultado esperado:
 
 ## Fase 3 - Parser itemizado do MVP
 
+Status: pendente
+
 Entregas:
 
 - parser inicial para o layout alvo dos exemplos
@@ -63,6 +82,8 @@ Resultado esperado:
 
 ## Fase 4 - Exportacao para Excel
 
+Status: pendente
+
 Entregas:
 
 - dialog de salvamento
@@ -74,6 +95,8 @@ Resultado esperado:
 - usuario salva o `.xlsx` ao final do lote com base detalhada e resumo consolidado
 
 ## Fase 5 - Qualidade e distribuicao
+
+Status: pendente
 
 Entregas:
 
@@ -88,16 +111,12 @@ Resultado esperado:
 
 ## Backlog inicial sugerido
 
-1. Criar estrutura `src/` e ponto de entrada do app.
-2. Implementar `MainWindow` com selecao de pasta.
-3. Implementar worker de progresso fake para validar UX.
-4. Implementar descoberta real de PDFs.
-5. Criar pipeline de rasterizacao e OCR.
-6. Criar modelos de `ItemExtraido` e `ErroExtracao`.
-7. Implementar parser de cidade e linhas de item.
-8. Implementar agregacao por cidade e item.
-9. Exportar para Excel.
-10. Criar testes com PDFs de exemplo.
+1. Conectar o worker real em segundo plano ao fluxo do botao `Extrair`.
+2. Criar pipeline de rasterizacao e OCR.
+3. Implementar parser de cidade e linhas de item.
+4. Integrar agregacao por cidade e item ao resultado do lote.
+5. Exportar para Excel nas abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`.
+6. Criar testes com PDFs de exemplo anonimizados.
 
 ## Dependencias externas previstas
 
@@ -122,4 +141,4 @@ Resultado esperado:
 
 - reunir de 5 a 20 PDFs reais e anonimizados para orientar o parser
 - validar se todos os layouts iniciais seguem o mesmo padrao visual
-- iniciar a implementacao pelo fluxo completo `OCR -> parser -> resumo`
+- ligar o fluxo completo `OCR -> parser -> resumo` a partir da base ja criada

@@ -79,6 +79,13 @@ Ao final do processo, o sistema deve informar:
 - quantidade de falhas
 - caminho do arquivo gerado
 
+## Status inicial de implementacao
+
+- `RF-01` ja possui implementacao inicial na janela principal.
+- `RF-02` ja possui implementacao inicial por meio da descoberta local de arquivos `.pdf`.
+- `RF-03` ja possui o fluxo base de interface com o botao `Extrair`.
+- `RF-04` em diante continuam planejados para as proximas etapas do MVP.
+
 ## Requisitos nao funcionais
 
 ### RNF-01 Plataforma alvo
