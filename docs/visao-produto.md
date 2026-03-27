@@ -10,14 +10,15 @@ A base inicial do produto ja existe no repositorio com:
 
 - estrutura modular em `src/`
 - ponto de entrada do aplicativo
-- janela principal inicial em `PySide6`
+- janela principal modernizada em `PySide6`
 - selecao da pasta de entrada
 - contagem de arquivos `.pdf` encontrados
-- area de status e barra de progresso conectadas ao processamento em segundo plano
+- area de status, cards de indicadores e barra de progresso conectadas ao processamento em segundo plano
 - pipeline inicial de OCR e extracao de cidade e itens para o layout atual dos exemplos
 - pacote local de idiomas OCR com `por+eng` para melhorar leitura dos PDFs reais
 - consolidacao inicial por `cidade + item` no resultado do lote
 - dialog de salvamento e geracao inicial do arquivo Excel com as tres abas do MVP
+- menu de ajuda com dialog do autor e link direto para o repositorio
 - suite de integracao preparada para validar o fluxo completo com amostras locais
 
 ## Problema

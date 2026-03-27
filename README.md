@@ -57,11 +57,13 @@ A fundacao inicial do projeto ja foi criada no repositorio:
 - estrutura em camadas dentro de `src/`
 - `pyproject.toml` com dependencias e ponto de entrada
 - janela principal inicial em `PySide6`
+- interface modernizada com hero, cards de indicadores e tema visual customizado
 - selecao de pasta e descoberta local de arquivos `.pdf`
 - processamento em segundo plano com progresso
 - pipeline inicial de rasterizacao, OCR e extracao de itens
 - agregacao por cidade e item integrada ao resultado do lote
 - exportacao para Excel com abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
+- reexportacao do ultimo lote e dialog "Sobre o autor" com link do repositorio
 - pacote local de idiomas OCR em `resources/tessdata` com selecao automatica de `por+eng`
 - modulos separados para dominio, aplicacao, infraestrutura e UI
 - testes unitarios iniciais para descoberta de PDFs, normalizacao, parser, agregacao e exportacao
@@ -113,4 +115,5 @@ Com as amostras disponiveis, o comando esperado e `pytest tests/integration`.
 ## Proximos passos sugeridos
 
 - adicionar PDFs anonimizados em `tests/fixtures/pdfs/`
-- refinamentos visuais e de usabilidade na interface
+- calibrar OCR e parser para novos layouts de nota
+- preparar empacotamento para Windows com `PyInstaller`

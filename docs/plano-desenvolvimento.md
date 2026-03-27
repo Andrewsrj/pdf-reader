@@ -10,12 +10,13 @@ Concluido nesta rodada:
 
 - estrutura inicial de pastas em `src/`
 - `pyproject.toml` com dependencias e entry point
-- janela principal inicial
+- janela principal modernizada
 - selecao de pasta com descoberta real de PDFs
 - processamento em segundo plano com progresso
 - pipeline inicial de rasterizacao, OCR e parser
 - agregacao por cidade e item integrada ao resultado do lote
 - exportacao do `.xlsx` com `Base_Itens`, `Resumo_Cidade_Item` e `Erros`
+- reexportacao do ultimo lote e dialog do autor com link para o GitHub
 - pacote OCR local com `por` e `eng` resolvido via `resources/tessdata`
 - modulos base de dominio, aplicacao, infraestrutura e UI
 - testes unitarios iniciais para componentes deterministas, parser, agregacao e exportacao
@@ -118,8 +119,8 @@ Resultado esperado:
 ## Backlog inicial sugerido
 
 1. Adicionar PDFs anonimizados em `tests/fixtures/pdfs/`.
-2. Refinar layout, mensagens e UX da interface para o fluxo completo.
-3. Calibrar OCR e parser para novos layouts e variacoes de ruido.
+2. Calibrar OCR e parser para novos layouts e variacoes de ruido.
+3. Preparar empacotamento inicial com `PyInstaller`.
 
 ## Dependencias externas previstas
 
