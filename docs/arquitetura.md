@@ -5,13 +5,13 @@
 O repositorio ja possui a fundacao da arquitetura em camadas:
 
 - `app/` com bootstrap e ponto de entrada
-- `ui/` com janela principal, dialogs e worker generico
-- `application/` com descoberta inicial de PDFs e modelos de progresso
+- `ui/` com janela principal, dialogs e worker em segundo plano
+- `application/` com descoberta de PDFs e orquestracao do lote
 - `domain/` com modelos, validacoes e normalizadores puros
 - `infrastructure/` com modulos separados para PDF, OCR, parser, agregacao, exportacao e logging
-- `tests/` com testes unitarios iniciais para funcoes deterministicas
+- `tests/` com testes unitarios iniciais para funcoes deterministicas e regras de parser
 
-Nesta etapa, OCR, parser detalhado e exportacao ainda estao como interfaces ou placeholders para a proxima vertical slice.
+Nesta etapa, OCR e parser inicial ja estao ligados ao fluxo da UI. Agregacao final e exportacao para Excel continuam como as proximas vertical slices.
 
 ## Decisoes principais
 
@@ -43,6 +43,13 @@ Stack recomendada para o MVP:
 - `PyMuPDF` para abrir e rasterizar a pagina do PDF
 - `pytesseract` com `Tesseract OCR` para obter o texto
 - `pypdf` para metadados e verificacoes auxiliares
+
+Implementacao atual:
+
+- renderizacao em 250 DPI para melhorar a leitura das linhas de item
+- autodeteccao do `tesseract.exe` em caminhos comuns do Windows
+- preferencia pelo idioma `por` quando instalado, com fallback para o idioma disponivel
+- OCR orientado a linhas com `image_to_string`, que preservou melhor o layout dos exemplos atuais
 
 ### Geracao do Excel
 
@@ -201,8 +208,7 @@ docs/
 A estrutura atual ja e a base alvo do projeto. As proximas iteracoes devem aprofundar os modulos placeholders, principalmente em:
 
 - `ui/workers.py` para o processamento real em segundo plano
-- `infrastructure/pdf/` e `infrastructure/ocr/` para rasterizacao e OCR
-- `infrastructure/parser/` para extracao de cidade e itens
+- `infrastructure/aggregation/` para consolidacao por cidade e item
 - `infrastructure/export/` para gerar o `.xlsx` final
 
 ## Observabilidade e erros

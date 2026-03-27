@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QThreadPool
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
@@ -15,8 +15,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from application.extraction_service import discover_pdf_files
+from application.extraction_service import InvoiceBatchProcessor, discover_pdf_files
+from domain.models import BatchExtractionResult
 from ui.dialogs import choose_input_folder
+from ui.workers import BackgroundTaskWorker
 
 
 class MainWindow(QMainWindow):
@@ -26,6 +28,9 @@ class MainWindow(QMainWindow):
         super().__init__()
         self._selected_folder: Path | None = None
         self._pdf_files: list[Path] = []
+        self._thread_pool = QThreadPool.globalInstance()
+        self._active_worker: BackgroundTaskWorker | None = None
+        self._last_result: BatchExtractionResult | None = None
 
         self.setWindowTitle("Extrator de Notas Fiscais em PDF")
         self.resize(760, 320)
@@ -47,7 +52,7 @@ class MainWindow(QMainWindow):
 
         description = QLabel(
             "Selecione a pasta de entrada para preparar o lote. "
-            "A infraestrutura inicial do aplicativo ja esta pronta para receber o pipeline de OCR."
+            "O processamento roda em segundo plano com OCR e parser de itens."
         )
         description.setWordWrap(True)
 
@@ -116,18 +121,64 @@ class MainWindow(QMainWindow):
             )
             return
 
+        processor = InvoiceBatchProcessor()
+        self.progress_bar.setValue(0)
+        self.status_label.setText("Iniciando o processamento em segundo plano...")
+        self._set_processing_state(True)
+
+        worker = BackgroundTaskWorker(
+            lambda emit_progress: processor.extract_batch(self._pdf_files, progress_callback=emit_progress)
+        )
+        worker.signals.started.connect(self._on_extraction_started)
+        worker.signals.progress.connect(self._on_extraction_progress)
+        worker.signals.finished.connect(self._on_extraction_finished)
+        worker.signals.failed.connect(self._on_extraction_failed)
+
+        self._active_worker = worker
+        self._thread_pool.start(worker)
+
+    def _on_extraction_started(self) -> None:
+        self.status_label.setText("Renderizando PDFs e preparando o OCR...")
+
+    def _on_extraction_progress(self, update: object) -> None:
+        if not hasattr(update, "percent") or not hasattr(update, "message"):
+            return
+
+        self.progress_bar.setValue(int(update.percent))
+        self.status_label.setText(str(update.message))
+
+    def _on_extraction_finished(self, result: object) -> None:
+        self._active_worker = None
+        self._set_processing_state(False)
+
+        if not isinstance(result, BatchExtractionResult):
+            QMessageBox.warning(self, "Resultado invalido", "O worker retornou um resultado inesperado.")
+            return
+
+        self._last_result = result
+        self.progress_bar.setValue(100)
         self.status_label.setText(
-            "Estrutura inicial pronta. O worker de extracao, OCR, parser e exportacao "
-            "sera conectado na proxima etapa."
+            f"Processamento concluido: {result.succeeded} sucesso(s), "
+            f"{result.partial} parcial(is), {result.failed} falha(s)."
         )
         QMessageBox.information(
             self,
-            "Base pronta",
+            "Extracao concluida",
             (
-                f"{len(self._pdf_files)} PDF(s) localizado(s). "
-                "A janela principal e a descoberta de arquivos ja estao implementadas."
+                f"Arquivos processados: {result.total_files}\n"
+                f"Sucessos: {result.succeeded}\n"
+                f"Parciais: {result.partial}\n"
+                f"Falhas: {result.failed}\n"
+                f"Itens extraidos: {result.total_items}"
             ),
         )
+
+    def _on_extraction_failed(self, message: str) -> None:
+        self._active_worker = None
+        self._set_processing_state(False)
+        self.progress_bar.setValue(0)
+        self.status_label.setText("O processamento falhou.")
+        QMessageBox.critical(self, "Falha na extracao", message)
 
     def _update_ui_state(self) -> None:
         total_pdfs = len(self._pdf_files)
@@ -138,6 +189,10 @@ class MainWindow(QMainWindow):
         elif total_pdfs == 0:
             self.status_label.setText("A pasta selecionada nao contem arquivos PDF.")
         else:
-            self.status_label.setText("Pasta validada. O lote esta pronto para a proxima etapa.")
+            self.status_label.setText("Pasta validada. O lote esta pronto para extracao.")
 
         self.extract_button.setEnabled(total_pdfs > 0)
+
+    def _set_processing_state(self, is_processing: bool) -> None:
+        self.select_folder_button.setEnabled(not is_processing)
+        self.extract_button.setEnabled(not is_processing and bool(self._pdf_files))

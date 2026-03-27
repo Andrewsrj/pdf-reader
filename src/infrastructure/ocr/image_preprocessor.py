@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import Any
+from PIL import Image, ImageOps
 
 
-def preprocess_image(image: Any) -> Any:
-    """Return the image as-is until preprocessing rules are defined."""
-    return image
+def preprocess_image(image: Image.Image) -> Image.Image:
+    """Apply light preprocessing that preserves the invoice layout."""
+    grayscale = ImageOps.grayscale(image)
+    return ImageOps.autocontrast(grayscale)

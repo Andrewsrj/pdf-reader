@@ -83,8 +83,10 @@ Ao final do processo, o sistema deve informar:
 
 - `RF-01` ja possui implementacao inicial na janela principal.
 - `RF-02` ja possui implementacao inicial por meio da descoberta local de arquivos `.pdf`.
-- `RF-03` ja possui o fluxo base de interface com o botao `Extrair`.
-- `RF-04` em diante continuam planejados para as proximas etapas do MVP.
+- `RF-03` ja dispara o processamento em lote.
+- `RF-04` e `RF-05` ja possuem implementacao inicial com worker em segundo plano, barra de progresso e status textual.
+- `RF-06`, `RF-07` e `RF-08` ja possuem implementacao inicial para o layout atual dos exemplos analisados.
+- `RF-09` em diante continuam planejados para as proximas etapas do MVP.
 
 ## Requisitos nao funcionais
 

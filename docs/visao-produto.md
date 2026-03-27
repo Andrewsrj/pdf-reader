@@ -13,7 +13,8 @@ A base inicial do produto ja existe no repositorio com:
 - janela principal inicial em `PySide6`
 - selecao da pasta de entrada
 - contagem de arquivos `.pdf` encontrados
-- area de status e barra de progresso preparadas para o fluxo em segundo plano
+- area de status e barra de progresso conectadas ao processamento em segundo plano
+- pipeline inicial de OCR e extracao de cidade e itens para o layout atual dos exemplos
 
 ## Problema
 

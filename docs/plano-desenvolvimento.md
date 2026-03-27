@@ -12,8 +12,10 @@ Concluido nesta rodada:
 - `pyproject.toml` com dependencias e entry point
 - janela principal inicial
 - selecao de pasta com descoberta real de PDFs
+- processamento em segundo plano com progresso
+- pipeline inicial de rasterizacao, OCR e parser
 - modulos base de dominio, aplicacao, infraestrutura e UI
-- testes unitarios iniciais para componentes deterministas
+- testes unitarios iniciais para componentes deterministas e parser
 
 ## Fase 0 - Fundacao do projeto
 
@@ -33,7 +35,7 @@ Resultado esperado:
 
 ## Fase 1 - Interface base
 
-Status: em andamento
+Status: concluida
 
 Entregas:
 
@@ -50,7 +52,7 @@ Resultado esperado:
 
 ## Fase 2 - Pipeline de leitura e OCR
 
-Status: pendente
+Status: concluida
 
 Entregas:
 
@@ -66,7 +68,7 @@ Resultado esperado:
 
 ## Fase 3 - Parser itemizado do MVP
 
-Status: pendente
+Status: em andamento
 
 Entregas:
 
@@ -111,12 +113,10 @@ Resultado esperado:
 
 ## Backlog inicial sugerido
 
-1. Conectar o worker real em segundo plano ao fluxo do botao `Extrair`.
-2. Criar pipeline de rasterizacao e OCR.
-3. Implementar parser de cidade e linhas de item.
-4. Integrar agregacao por cidade e item ao resultado do lote.
-5. Exportar para Excel nas abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`.
-6. Criar testes com PDFs de exemplo anonimizados.
+1. Integrar agregacao por cidade e item ao resultado do lote.
+2. Exportar para Excel nas abas `Base_Itens`, `Resumo_Cidade_Item` e `Erros`.
+3. Criar testes com PDFs de exemplo anonimizados.
+4. Melhorar o OCR com pacote de idioma `por` e calibracoes adicionais de preprocessamento.
 
 ## Dependencias externas previstas
 
@@ -141,4 +141,4 @@ Resultado esperado:
 
 - reunir de 5 a 20 PDFs reais e anonimizados para orientar o parser
 - validar se todos os layouts iniciais seguem o mesmo padrao visual
-- ligar o fluxo completo `OCR -> parser -> resumo` a partir da base ja criada
+- ligar o fluxo completo `OCR -> parser -> resumo -> Excel` a partir da base ja criada

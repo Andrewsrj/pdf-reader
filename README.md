@@ -58,8 +58,10 @@ A fundacao inicial do projeto ja foi criada no repositorio:
 - `pyproject.toml` com dependencias e ponto de entrada
 - janela principal inicial em `PySide6`
 - selecao de pasta e descoberta local de arquivos `.pdf`
+- processamento em segundo plano com progresso
+- pipeline inicial de rasterizacao, OCR e extracao de itens
 - modulos separados para dominio, aplicacao, infraestrutura e UI
-- testes unitarios iniciais para descoberta de PDFs e normalizacao
+- testes unitarios iniciais para descoberta de PDFs, normalizacao e parser
 
 ## Estrutura atual
 
@@ -88,13 +90,16 @@ docs/
 2. Instalar as dependencias com `pip install -e .[dev]`.
 3. Iniciar a aplicacao com `python -m app.main`.
 
+Observacao:
+O app detecta automaticamente o `tesseract.exe` em instalacoes comuns do Windows. Se o idioma `por` estiver instalado no Tesseract, ele sera priorizado; caso contrario, o pipeline usa o idioma disponivel como fallback.
+
 ## Direcao tecnica recomendada
 
 `PySide6` continua sendo a melhor escolha para a interface. Como os PDFs de exemplo nao expuseram texto por leitura simples, o MVP passa a considerar OCR como parte do fluxo principal de extracao.
 
 ## Proximos passos sugeridos
 
-- pipeline de OCR e extracao com progresso
-- parser de cidade e itens
+- agregacao por cidade e item
 - exportador do resumo consolidado e da base detalhada
 - testes com PDFs reais anonimizados
+- melhoria de OCR com pacote de idioma `por`
