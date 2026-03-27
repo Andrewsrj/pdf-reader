@@ -134,7 +134,7 @@ Com as amostras disponiveis, o comando esperado e `pytest tests/integration`.
 
 `PySide6` continua sendo a melhor escolha para a interface. Como os PDFs de exemplo nao expuseram texto por leitura simples, o MVP passa a considerar OCR como parte do fluxo principal de extracao.
 
-## Proximos passos sugeridos
+## Proximos passos
 
 - adicionar PDFs anonimizados em `tests/fixtures/pdfs/`
 - calibrar OCR e parser para novos layouts de nota
